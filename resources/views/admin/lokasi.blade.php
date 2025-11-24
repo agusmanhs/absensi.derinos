@@ -7,7 +7,7 @@
             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-12 d-flex no-block align-items-center">
-                        <h4 class="page-title">Daftar Pegawai</h4>
+                        <h4 class="page-title">Lokasi Kantor</h4>
                         <div class="ml-auto text-right">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
@@ -47,7 +47,7 @@
                                                 Tambah Pegawai
                                             </button> --}}
                                             <a href="javascript:void(0)" data-toggle="modal" data-target="#add-new-event" class="btn m-t-20 btn-info btn-block waves-effect waves-light">
-                                                            <i class="ti-plus"></i> Tambah Pegawai
+                                                            <i class="ti-plus"></i> Tambah Lokasi
                                             </a>
                                         </div>
                                 </div>
@@ -77,12 +77,12 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Position</th>
-                                                <th>Office</th>
-                                                <th>Age</th>
-                                                <th>Start date</th>
-                                                <th>Salary</th>
+                                                <th>Nama</th>
+                                                <th>Jam Masuk</th>
+                                                <th>Jam Keluar</th>
+                                                <th>Jarak Toleransi</th>
+                                                <th>Latitude Longitude</th>
+                                                <th>Action</th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -131,29 +131,29 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label class="control-label">Nama Lokasi</label>
-                                            <input class="form-control form-white" placeholder="Enter name" type="text" name="nama_lokasi" />
+                                            <input class="form-control form-white" placeholder="Masukkan lokasi" type="text" name="nama_lokasi" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label class="control-label">Jam Masuk</label>
-                                            <input class="form-control form-white" placeholder="Masukkan email" type="time" name="jam_masuk" />
+                                            <input class="form-control form-white" placeholder="Masukkan jam masuk" type="time" name="jam_masuk" />
                                         </div>
                                         <div class="col-md-6">
                                             <label class="control-label">Jam Keluar</label>
-                                            <input class="form-control form-white" placeholder="Masukkan password" type="time" name="jam_keluar" />
+                                            <input class="form-control form-white" placeholder="Masukkan jam keluar" type="time" name="jam_keluar" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label class="control-label">Latitude Longitude</label>
-                                            <input class="form-control form-white" placeholder="Enter name" type="text" name="lokasi" />
+                                            <input class="form-control form-white" placeholder="Masukkan lokasi" type="text" name="lokasi" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label class="control-label">Jarak Toleransi</label>
-                                            <input class="form-control form-white" placeholder="Enter name" type="text" name="batas_jarak" />
+                                            <input class="form-control form-white" placeholder="Masukkan jarak" type="text" name="batas_jarak" />
                                         </div>
                                     </div>
                                 </div>

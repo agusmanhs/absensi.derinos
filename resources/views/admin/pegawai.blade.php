@@ -71,18 +71,149 @@
                                                     <td>{{ $y->jabatan }}</td>
                                                     <td>{{ $y->user->email }}</td>
                                                     <td>{{ $y->notelp }}</td>
-                                                    <td></td>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-sm me-1" data-toggle="modal" data-target="#detail{{ $y->id }}">
+                                                            <i class="mdi mdi-eye"></i>
+                                                        </button>
+                                                        
+                                                        <button class="btn btn-sm me-1" data-toggle="modal" data-target="#edit{{ $y->id }}">
+                                                            <i class="mdi mdi-pencil"></i>
+                                                        </button>
+                                                        
+                                                        <button class="btn btn-sm me-1" onclick="hapusPegawai({{ $y->id }})">
+                                                            <i class="mdi mdi-delete"></i>
+                                                        </button>
+                                                    </td>
                                                 </tr>
+
+                                                
+                                                 {{-- edit --}}
+                                                 <div class="modal fade none-border" id="edit{{ $y->id }}">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title"><strong>Edit Pegawai</strong></h4>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                            </div>
+                                                            <form action="{{ route('admin.update.pegawai', $y->id) }}" method="POST" enctype="multipart/form-data">
+                                                                @csrf @method('PUT')
+                                                                <div class="modal-body">
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <label class="control-label">Nama</label>
+                                                                            <input class="form-control form-white" placeholder="Masukkan nama" type="text" name="nama" value="{{ $y->nama }}"/>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <label class="control-label">Nik</label>
+                                                                            <input class="form-control form-white" placeholder="Masukkan nik" type="text" name="nik" value="{{ $y->nik }}" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <label class="control-label">Foto</label>
+                                                                            <input class="form-control form-white" placeholder="Masukkan foto" type="file" name="foto" value="{{ $y->nama }}" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <label class="control-label">Jenis Kelamin</label>
+                                                                            <select class="form-control form-white" data-placeholder="Choose a color..." name="jenisKelamin">
+                                                                                <option value="Laki-laki" {{ $y->jenisKelamin == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                                                                                <option value="Perempuan" {{ $y->jenisKelamin == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                                                                            </select>                                        
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <label class="control-label">Alamat</label>
+                                                                            <input class="form-control form-white" placeholder="Masukkan alamat" type="text" name="alamat" value="{{ $y->alamat }}" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <label class="control-label">Jabatan</label>
+                                                                            <select class="form-control form-white" data-placeholder="Choose a color..." name="jabatan">
+                                                                                <option value="Manajer" {{ $y->jabatan == 'Manajer' ? 'selected' : '' }}>Manajer</option>
+                                                                                <option value="Sekretaris" {{ $y->jabatan == 'Sekretaris' ? 'selected' : '' }}>Sekeretaris</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <label class="control-label">No telp</label>
+                                                                            <input class="form-control form-white" placeholder="Masukkan telepon" type="text" name="notelp" value="{{ $y->notelp }}" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <label class="control-label">Email</label>
+                                                                            <input class="form-control form-white" placeholder="Masukkan email" type="email" name="email" value="{{ $y->email }}" />
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <label class="control-label">Password</label>
+                                                                            <input class="form-control form-white" placeholder="Masukkan password" type="password" name="password" value="{{ $y->password }}" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-danger waves-effect waves-light save-category">Simpan</button>
+                                                                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Modal Detail -->
+                                                <div class="modal fade none-border" id="detail{{ $y->id }}">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title"><strong>Detail Pegawai</strong></h4>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-hidden="true">&times;</button>
+                                                            </div>
+
+                                                            <div class="modal-body">
+
+                                                                <div class="row">
+                                                                    <div class="col-md-4 text-center">
+                                                                      <img src="{{ asset('images/'.$y->foto) }}" alt="Foto Karyawan" class="img-fluid rounded" width="250">
+                                                                    </div>
+
+                                                                <div class="col-md-8">
+                                                                    <ul class="list-group list-group-flush">
+                                                                        <li class="list-group-item"><strong>NIK:</strong> {{ $y->nik }}</li>
+                                                                        <li class="list-group-item"><strong>Nama:</strong> {{ $y->nama }}</li>
+                                                                        <li class="list-group-item"><strong>Jenis Kelamin:</strong> {{ $y->jenisKelamin }}</li>
+                                                                        <li class="list-group-item"><strong>Alamat:</strong> {{ $y->alamat }}</li>
+                                                                        <li class="list-group-item"><strong>Jabatan:</strong> {{ $y->jabatan }}</li>
+                                                                        <li class="list-group-item"><strong>No Telp:</strong> {{ $y->notelp }}</li>
+                                                                        <li class="list-group-item"><strong>Email:</strong> {{ $y->user->email }}</li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             @endforeach
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Position</th>
-                                                <th>Office</th>
-                                                <th>Age</th>
-                                                <th>Start date</th>
-                                                <th>Salary</th>
+                                                <th>Nama</th>
+                                                <th>Nik</th>
+                                                <th>Jabatan</th>
+                                                <th>Username</th>
+                                                <th>No telp</th>
+                                                <th>Action</th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -118,62 +249,63 @@
             <!-- ============================================================== -->
         </div>
 
+
+            {{-- Tambah --}}
                 <div class="modal fade none-border" id="add-new-event">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title"><strong>Add</strong> a category</h4>
+                                <h4 class="modal-title"><strong>Tambah Pegawai</strong></h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
                             <form action="{{ route('admin.tambah.pegawai') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
                                 <div class="modal-body">
-                                    @csrf
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label class="control-label">Nama</label>
-                                            <input class="form-control form-white" placeholder="Enter name" type="text" name="nama" />
+                                            <input class="form-control form-white" placeholder="Masukkan nama" type="text" name="nama" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label class="control-label">Nik</label>
-                                            <input class="form-control form-white" placeholder="Enter name" type="text" name="nik" />
+                                            <input class="form-control form-white" placeholder="Masukkan nik" type="text" name="nik" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label class="control-label">Foto</label>
-                                            <input class="form-control form-white" placeholder="Enter name" type="file" name="foto" />
+                                            <input class="form-control form-white" placeholder="Masukkan foto" type="file" name="foto" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label class="control-label">Jenis Kelamin</label>
                                             <select class="form-control form-white" data-placeholder="Choose a color..." name="jenisKelamin">
-                                                <option value="success">Laki-laki</option>
-                                                <option value="danger">Perempuan</option>
-                                            </select>
-                                        </div>
+                                                <option value="Laki-laki">Laki-laki</option>
+                                                <option value="Perempuan">Perempuan</option>
+                                            </select>                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label class="control-label">Alamat</label>
-                                            <input class="form-control form-white" placeholder="Enter name" type="text" name="alamat" />
+                                            <input class="form-control form-white" placeholder="Masukkan alamat" type="text" name="alamat" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label class="control-label">Jabatan</label>
                                             <select class="form-control form-white" data-placeholder="Choose a color..." name="jabatan">
-                                                <option value="success">Manajer</option>
-                                                <option value="danger">Sekeretaris</option>
+                                                <option value="Manajer">Manajer</option>
+                                                <option value="Sekretaris">Sekretaris</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label class="control-label">No telp</label>
-                                            <input class="form-control form-white" placeholder="Enter name" type="text" name="notelp" />
+                                            <input class="form-control form-white" placeholder="Masukkan telepon" type="text" name="notelp" />
                                         </div>
                                     </div>
                                     <div class="row">
@@ -191,9 +323,29 @@
                                     <button type="submit" class="btn btn-danger waves-effect waves-light save-category">Save</button>
                                     <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
                                 </div>
-                            </form>
+                            </form>a
                         </div>
                     </div>
                 </div>
+
+                <form id="form-hapus" method="POST" action="" style="display: none;">
+                    @csrf
+                    @method('DELETE')
+                  </form>
+                  
+                  <script>
+                    function hapusPegawai(id) {
+                        if (confirm('Apakah anda yakin ingin menghapus?')) {
+                    
+                            let url = "{{ route('admin.delete.pegawai', ':id') }}";
+                            url = url.replace(':id', id);
+                    
+                            const form = document.getElementById('form-hapus');
+                            form.action = url;
+                            form.submit();
+                        }
+                    }
+                    </script>
+                    
 
 @endsection

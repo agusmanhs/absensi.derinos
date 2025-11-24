@@ -7,7 +7,7 @@
             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-12 d-flex no-block align-items-center">
-                        <h4 class="page-title">Daftar Pegawai</h4>
+                        <h4 class="page-title">Jabatan</h4>
                         <div class="ml-auto text-right">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
@@ -47,7 +47,7 @@
                                                 Tambah Pegawai
                                             </button> --}}
                                             <a href="javascript:void(0)" data-toggle="modal" data-target="#add-new-event" class="btn m-t-20 btn-info btn-block waves-effect waves-light">
-                                                            <i class="ti-plus"></i> Tambah Pegawai
+                                                            <i class="ti-plus"></i> Tambah Jabatan
                                             </a>
                                         </div>
                                 </div>
@@ -125,13 +125,13 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label class="control-label">Kode Jabatan</label>
-                                            <input class="form-control form-white" placeholder="Enter name" type="text" name="kode_jabatan" />
+                                            <input class="form-control form-white" placeholder="Masukkan kode jabatan" type="text" name="kode_jabatan" />
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label class="control-label">Nama Jabatan</label>
-                                            <input class="form-control form-white" placeholder="Masukkan email" type="text" name="nama_jabatan" />
+                                            <input class="form-control form-white" placeholder="Masukkan jabatan" type="text" name="nama_jabatan" />
                                         </div>
                                     </div>
                                     <div class="row">
