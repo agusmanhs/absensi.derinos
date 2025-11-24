@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Helpers\Helper;
+use App\Models\Absensi;
+use Illuminate\Http\Request;
+
+class UserController extends Controller
+{
+    public function index() {
+        $lokasikantor = Helper::lokasiKantor();
+        $lock = explode(', ', $lokasikantor); 
+        $lat = $lock[0];
+        $long = $lock[1];
+        $data = Absensi::orderBy('tanggal')->get();
+        return view('user.dashboard', compact('data','lat','long'));
+    }
+
+
+}

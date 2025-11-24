@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\JabatanController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LokasiController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', [LoginController::class,'index'])->name('login');
 Route::post('login', [LoginController::class,'proses_login'])->name('proses_login');
@@ -26,8 +29,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin/jabatan', [JabatanController::class, 'index'])->name('admin.jabatan');
     Route::post('/admin/jabatan/tambah', [JabatanController::class, 'store'])->name('admin.tambah.jabatan');
 
+});
 
 
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/user', [UserController::class, 'index'])->name('user.dashboard');
+
+    Route::post('/user/masuk', [AbsensiController::class, 'masuk'])->name('absensi.masuk');
+    Route::post('/user/keluar', [AbsensiController::class, 'keluar'])->name('absensi.keluar');
 
 
 
@@ -36,3 +45,10 @@ Route::group(['middleware' => ['auth']], function () {
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+Route::get('/cc', function () {
+    Artisan::call('optimize:clear');
+    Artisan::call('config:cache');
+    Artisan::call('view:clear');
+    return "Cache is cleared";
+});

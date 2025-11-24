@@ -10,7 +10,6 @@ class LoginController extends Controller
     public function index()
     {
         $user = Auth::user();
-
         if ($user) {
             if ($user->level === 'Admin') {
                 return redirect()->route('admin.dashboard');
@@ -37,15 +36,17 @@ class LoginController extends Controller
 
             $user = Auth::user();
 
-            // if ($user->level === 'Admin') {
+            if ($user->level === 'Admin') {
                 return redirect()->route('admin.dashboard');
-            // } elseif ($user->level === 'User') {
-            //     return redirect()->route('user.dashboard');
-            // } else {
-            //     // Auth::logout();
-            //     // dd('test');
-            //     return redirect()->route('login')->with('login_error', 'Level tidak dikenali.');
-            // }
+            } elseif ($user->level === 'User') {
+            // dd($user->level);
+
+                return redirect()->route('user.dashboard');
+            } else {
+                Auth::logout();
+                dd('test');
+                return redirect()->route('login')->with('login_error', 'Level tidak dikenali.');
+            }
         }
 
         // return redirect()->route('login')

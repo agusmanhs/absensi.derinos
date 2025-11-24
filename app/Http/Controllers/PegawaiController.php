@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jabatan;
 use App\Models\Pegawai;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,7 +18,8 @@ class PegawaiController extends Controller
     public function index()
     {
         $data = Pegawai::orderBy('nama')->get();
-        return view('admin.pegawai', compact('data'));
+        $jabatan = Jabatan::orderBy('nama_jabatan')->get();
+        return view('admin.pegawai', compact('data', 'jabatan'));
     }
 
     /**
@@ -41,15 +43,16 @@ class PegawaiController extends Controller
             $user = User::create([
                 'name' => $request->nama,
                 'email' => $request->email,
+                'level' => 'User',
                 'password' => Hash::make($request->password),
             ]);
 
             // 2. Buat Pegawai dengan user_id dari user yang baru dibuat
             $pegawai = Pegawai::create([
                 'user_id' => $user->id,
+                'jabatan_id' => $request->jabatan,
                 'nik' => $request->nik,
                 'nama' => $request->nama,
-                'jabatan' => $request->jabatan,
                 'jenisKelamin' => $request->jenisKelamin,
                 'notelp' => $request->notelp,
                 'alamat' => $request->alamat,

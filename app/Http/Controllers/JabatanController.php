@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jabatan;
+use App\Models\Lokasi;
 use Illuminate\Http\Request;
 
 class JabatanController extends Controller
@@ -13,7 +14,8 @@ class JabatanController extends Controller
     public function index()
     {
         $data = Jabatan::orderBy('kode_jabatan')->get();
-        return view('admin.jabatan', compact('data'));
+        $lokasi = Lokasi::orderBy('nama_lokasi')->get();
+        return view('admin.jabatan', compact('data', 'lokasi'));
     }
 
     /**

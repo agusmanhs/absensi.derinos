@@ -68,7 +68,7 @@
                                                 <tr>
                                                     <td>{{ $y->nama }}</td>
                                                     <td>{{ $y->nik }}</td>
-                                                    <td>{{ $y->jabatan }}</td>
+                                                    <td>{{ $y->jabatan->nama_jabatan }}</td>
                                                     <td>{{ $y->user->email }}</td>
                                                     <td>{{ $y->notelp }}</td>
                                                     <td class="text-center">
@@ -135,8 +135,9 @@
                                                                         <div class="col-md-12">
                                                                             <label class="control-label">Jabatan</label>
                                                                             <select class="form-control form-white" data-placeholder="Choose a color..." name="jabatan">
-                                                                                <option value="Manajer" {{ $y->jabatan == 'Manajer' ? 'selected' : '' }}>Manajer</option>
-                                                                                <option value="Sekretaris" {{ $y->jabatan == 'Sekretaris' ? 'selected' : '' }}>Sekeretaris</option>
+                                                                                @foreach ($jabatan as $a)
+                                                                                <option value="{{ $a->id }}">{{ $a->nama_jabatan }}</option>
+                                                                                @endforeach
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -178,7 +179,7 @@
 
                                                             <div class="modal-body">
 
-                                                                <div class="row">
+                                                            <div class="row">
                                                                     <div class="col-md-4 text-center">
                                                                       <img src="{{ asset('images/'.$y->foto) }}" alt="Foto Karyawan" class="img-fluid rounded" width="250">
                                                                     </div>
@@ -297,8 +298,9 @@
                                         <div class="col-md-12">
                                             <label class="control-label">Jabatan</label>
                                             <select class="form-control form-white" data-placeholder="Choose a color..." name="jabatan">
-                                                <option value="Manajer">Manajer</option>
-                                                <option value="Sekretaris">Sekretaris</option>
+                                                 @foreach ($jabatan as $a)
+                                                    <option value="{{ $a->id }}">{{ $a->nama_jabatan }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>

@@ -138,8 +138,9 @@
                                         <div class="col-md-12">
                                             <label class="control-label">Lokasi Absen</label>
                                             <select class="form-control form-white" data-placeholder="Choose a color..." name="lokasi_id">
-                                                <option value="1">Kantor 1</option>
-                                                <option value="2">Kantor 2</option>
+                                                @foreach ($lokasi as $y)
+                                                <option value="{{ $y->id }}">{{ $y->nama_lokasi }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
