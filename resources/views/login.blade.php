@@ -145,6 +145,16 @@
     });
     </script>
 
+    @if(session('login_error'))
+    <script>
+        Swal.fire({
+            title: 'Oopss..',
+            icon: 'error',
+            text: '{{ session("login_error") }}'
+        });
+    </script>
+    @endif
+
 </body>
 
 </html>

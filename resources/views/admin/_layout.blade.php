@@ -17,6 +17,9 @@
     <link href="{{ asset('/matrix-admin/') }}/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet">
 
     <link href="{{ asset('/matrix-admin/') }}/dist/css/style.min.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -108,6 +111,8 @@
          ****************************************/
         $('#zero_config').DataTable();
     </script>   
+
+    @yield('scripts')
 
 </body>
 

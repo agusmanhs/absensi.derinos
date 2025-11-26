@@ -66,16 +66,33 @@ class JabatanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Jabatan $jabatan)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'kode_jabatan' => 'required',
+            'nama_jabatan' => 'required|string|max:255',
+            'lokasi_id' => 'required',
+        ]);
+
+        $jabatan = Jabatan::findOrFail($id);
+
+        $jabatan->update([
+            'kode_jabatan' => $request->kode_jabatan,
+            'nama_jabatan' => $request->nama_jabatan,
+            'lokasi_id' => $request->lokasi_id,
+        ]);
+
+        return redirect()->route('admin.jabatan')->with('success_message', 'Jabatan berhasil diupdate!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Jabatan $jabatan)
+    public function destroy(Jabatan $jabatan, $id)
     {
-        //
+        $jabatan = Jabatan::findOrFail($id);
+        $jabatan->delete();
+
+        return redirect()->route('admin.jabatan')->with('success_message', 'Jabatan berhasil dihapus!');
     }
 }

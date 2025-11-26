@@ -325,7 +325,7 @@
                                     <button type="submit" class="btn btn-danger waves-effect waves-light save-category">Save</button>
                                     <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
                                 </div>
-                            </form>a
+                            </form>
                         </div>
                     </div>
                 </div>

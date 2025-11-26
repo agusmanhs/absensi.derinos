@@ -25,9 +25,15 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/admin/lokasi', [LokasiController::class, 'index'])->name('admin.lokasi');
     Route::post('/admin/lokasi/tambah', [LokasiController::class, 'store'])->name('admin.tambah.lokasi');
+    Route::put('/admin/lokasi/update/{id}', [LokasiController::class, 'update'])->name('admin.update.lokasi');
+    Route::delete('/admin/lokasi/delete/{id}', [LokasiController::class, 'destroy'])->name('admin.delete.lokasi');
 
     Route::get('/admin/jabatan', [JabatanController::class, 'index'])->name('admin.jabatan');
     Route::post('/admin/jabatan/tambah', [JabatanController::class, 'store'])->name('admin.tambah.jabatan');
+    Route::put('/admin/jabatan/update/{id}', [JabatanController::class, 'update'])->name('admin.update.jabatan');
+    Route::delete('/admin/jabatan/delete/{id}', [JabatanController::class, 'destroy'])->name('admin.delete.jabatan');
+
+
 
 });
 

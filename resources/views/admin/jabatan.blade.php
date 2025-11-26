@@ -67,8 +67,60 @@
                                                     <td>{{ $y->kode_jabatan }}</td>
                                                     <td>{{ $y->nama_jabatan }}</td>
                                                     <td>{{ $y->lokasi->nama_lokasi }}</td>
-                                                    <td></td>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-sm me-1" data-toggle="modal" data-target="#edit{{ $y->id }}">
+                                                            <i class="mdi mdi-pencil"></i>
+                                                        </button>
+                                                        
+                                                        <button class="btn btn-sm me-1" onclick="hapusJabatan({{ $y->id }})">
+                                                            <i class="mdi mdi-delete"></i>
+                                                        </button>
+                                                    </td>
                                                 </tr>
+
+
+                                                <div class="modal fade none-border" id="edit{{ $y->id }}">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title"><strong>Edit Jabatan</strong></h4>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                            </div> 
+                                                            <form action="{{ route('admin.update.jabatan', $y->id) }}" method="POST" enctype="multipart/form-data">
+                                                                <div class="modal-body">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <label class="control-label">Kode Jabatan</label>
+                                                                            <input class="form-control form-white" placeholder="Masukkan kode jabatan" type="text" name="kode_jabatan" value="{{ $y->kode_jabatan }}" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <label class="control-label">Nama Jabatan</label>
+                                                                            <input class="form-control form-white" placeholder="Masukkan jabatan" type="text" name="nama_jabatan" value="{{ $y->nama_jabatan }}" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <label class="control-label">Lokasi Absen</label>
+                                                                            <select class="form-control form-white" data-placeholder="Choose a color..." name="lokasi_id">
+                                                                                @foreach ($lokasi as $y)
+                                                                                <option value="{{ $y->id }}">{{ $y->nama_lokasi }}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-danger waves-effect waves-light save-category">Save</button>
+                                                                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             @endforeach
                                         </tbody>
                                         <tfoot>
@@ -153,5 +205,26 @@
                         </div>
                     </div>
                 </div>
+
+            </div>
+
+            <form id="form-hapus" method="POST" action="" style="display: none;">
+                @csrf
+                @method('DELETE')
+              </form>
+              
+              <script>
+                function hapusJabatan(id) {
+                    if (confirm('Apakah anda yakin ingin menghapus?')) {
+                
+                        let url = "{{ route('admin.delete.jabatan', ':id') }}";
+                        url = url.replace(':id', id);
+                
+                        const form = document.getElementById('form-hapus');
+                        form.action = url;
+                        form.submit();
+                    }
+                }
+                </script>
 
 @endsection

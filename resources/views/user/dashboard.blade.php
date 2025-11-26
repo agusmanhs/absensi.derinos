@@ -31,15 +31,17 @@
             <!-- ============================================================== -->
             <div class="row">
 
-                <div class="card mb-2 col-lg-6" style="height: 300px; border: none; background-color: #B3A6DD; width: 100%;">
+                <div class="card mb-2 col-lg-6"
+                    style="height: 300px; border: none; background-color: #424144; width: 100%;">
                     <div class="card-body d-flex justify-content-center align-items-center" id="lokasidevices">
-                        
+
                     </div>
                 </div>
-                <div class="card mb-2 col-lg-6" style="height: 300px; border: none; background-color: #B3A6DD; width: 100%;">
+                <div class="card mb-2 col-lg-6"
+                    style="height: 300px; border: none; background-color: #424144; width: 100%;">
                     <div class="card-body d-flex justify-content-center align-items-center" id="lokasikantor">
                         <iframe class="p-3" style="left:0;top:0;height:100%;width:100%;position:absolute;"
-                            src="https://maps.google.com/maps?q={{$lat}}, {{ $long }}&output=embed"
+                            src="https://maps.google.com/maps?q={{ $lat }}, {{ $long }}&output=embed"
                             width="800" height="600" allowfullscreen="" loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
@@ -123,7 +125,7 @@
             <!-- ============================================================== -->
             <!-- Recent comment and chats -->
             <!-- ============================================================== -->
-            {{-- @if(session('warning'))
+            {{-- @if (session('warning'))
                 <div class="alert alert-danger" id="demo">
                     {{ session('warning') }}
                     jarak Anda dari kantor {{ session('jaraknya') }} meter
@@ -139,57 +141,78 @@
                             <h4 class="card-title"></h4>
                         </div>
 
-                    <div class="row">
+                        <div class="row">
                             <div class="col-md-4 text-center ml-3">
-                                <img src="{{ asset('images/') }}" alt="Foto Karyawan" class="img-fluid rounded" width="250">
+                                <img src="{{ asset('images/') }}" alt="Foto Karyawan" class="img-fluid"
+                                    width="250">
                             </div>
 
                             <div class="col-md-6">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><strong>NIK:</strong> {{ Auth::user()->pegawai->nik }}</li>
-                                    <li class="list-group-item"><strong>Nama:</strong> {{ Auth::user()->pegawai->nama }}</li>
-                                    <li class="list-group-item"><strong>Jabatan:</strong> {{ Auth::user()->pegawai->jabatan->nama_jabatan }}</li>
+                                    <li class="list-group-item"><strong>Nama:</strong> {{ Auth::user()->pegawai->nama }}
+                                    </li>
+                                    <li class="list-group-item"><strong>Jabatan:</strong>
+                                        {{ Auth::user()->pegawai->jabatan->nama_jabatan }}</li>
                                 </ul>
                             </div>
-                    </div>
-
-                    <div class="card my-3 ml-3 mr-3" style="height: 50px; background-color:antiquewhite;">
-                        
-                        <form action="{{ route('absensi.masuk') }}" method="POST" id="absenForm">
-                            @csrf
-                            <input type="hidden" name="latitude" id="latitude">
-                            <input type="hidden" name="longitude" id="longitude">
-                            
-                            <button type="button" class="box bg-success card-body p-0 d-flex align-items-center justify-content-center" onclick="getLocationAndSubmit()"
-                                style="width: 100%; height: 100px; border: none; box-shadow: none; background-color: #a6f29c;">
-                                <div class="card-body d-flex justify-content-center align-items-center">
-                                    <h5 class="card-title fs-4">ABSEN MASUK</h5>
-                                </div>
-                            </button>
-                        </form>
-                    </div>
-                    <div class="card my-3 ml-3 mr-3" style="height: 50px; background-color:antiquewhite;">
-                        <form action="{{ route('absensi.keluar') }}" method="POST" id="absenOut">
-                            @csrf
-                            <input type="hidden" name="latitude" id="latitude">
-                            <input type="hidden" name="longitude" id="longitude">
-                            
-                            <button type="button" class="box bg-danger card-body p-0 d-flex align-items-center justify-content-center" onclick="getLocationAndOut()"
-                                style="width: 100%; height: 100px; border: none; box-shadow: none; background-color: #a6f29c;">
-                                <div class="card-body d-flex justify-content-center align-items-center">
-                                    <h5 class="card-title fs-4">ABSEN KELUAR</h5>
-                                </div>
-                            </button>
-                        </form>
-                    </div>
-                    <div class="card my-3 ml-3 mr-3" style="height: 50px; background-color:antiquewhite;">
-                        <div class="box bg-info card-body p-0 d-flex align-items-center justify-content-center">
-                            <div class="px-3">
-                                <i class="bi bi-person-vcard text-white fs-4"></i>
-                            </div>
-                            <span class="text-white">Izin</span>
                         </div>
-                    </div>
+
+                    
+                        <div class="card my-3 mx-3" style="border-radius: 12px;">
+                            <form action="{{ route('absensi.masuk') }}" method="POST" id="absenForm">
+                                @csrf
+                                <input type="hidden" name="latitude" id="latitude">
+                                <input type="hidden" name="longitude" id="longitude">
+
+                                <button type="button" class="box bg-success w-100 py-3" onclick="getLocationAndSubmit()"
+                                    style="
+                                            color: white;
+                                            border: none;
+                                            font-size: 15px;
+                                            font-weight: bold;
+                                            border-radius: 10px;
+                                        ">
+                                    ABSEN MASUK
+                                </button>
+                            </form>
+                        </div>
+
+                    
+                        <div class="card my-3 mx-3" style="border-radius: 12px;">
+                            <form action="{{ route('absensi.keluar') }}" method="POST" id="absenOut">
+                                @csrf
+                                <input type="hidden" name="latitude" id="latitude">
+                                <input type="hidden" name="longitude" id="longitude">
+
+                                <button type="button" class="box bg-danger w-100 py-3" onclick="getLocationAndOut()"
+                                    style="
+                                            color: white;
+                                            border: none;
+                                            font-size: 15px;
+                                            font-weight: bold;
+                                            border-radius: 10px;
+                                        ">
+                                    ABSEN KELUAR
+                                </button>
+                            </form>
+                        </div>
+
+                    
+                        <div class="card my-3 mx-3" style="border-radius: 12px;">
+                            <button type="button" class="box bg-info w-100 py-3"
+                                style="
+                                            color: white;
+                                            border: none;
+                                            font-size: 15px;
+                                            font-weight: bold;
+                                            border-radius: 10px;
+                                        ">
+                                IZIN
+                            </button>
+                        </div>
+
+
                         {{-- <div class="comment-widgets scrollable">
                             <!-- Comment Row -->
                             <div class="d-flex flex-row comment-row m-t-0">
@@ -251,40 +274,40 @@
                     <!-- Card -->
                     <div class="card">
                         <div class="card-body">
-                                @if(session('error'))
-                                    <div class="alert alert-danger">
-                                        {{ session('error') }}
-                                    </div>
-                                @endif
-                                <div class="d-flex justify-content-start align-items-center" style="margin-bottom: 20px;">
-                                    <h5 class="card-title">History Absensi</h5>
+                            @if (session('error'))
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
                                 </div>
-                                <div class="table-responsive">
-                                    <table id="zero_config" class="table table-striped table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Tanggal</th>
-                                                <th>Absen Masuk</th>
-                                                <th>Absen Keluar</th>
-                                                <th>Status</th>
-                                                <th>Keterangan</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($data as $y)    
-                                                <tr>
-                                                    <td>{{ $y->tanggal}}</td>
-                                                    <td>{{ $y->absen_masuk}}</td>
-                                                    <td>{{ $y->absen_keluar}}</td>
-                                                    <td>{{ $y->status}}</td>
-                                                    <td>{{ $y->ket_ijin}}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-
+                            @endif
+                            <div class="d-flex justify-content-start align-items-center" style="margin-bottom: 20px;">
+                                <h5 class="card-title">History Absensi</h5>
                             </div>
+                            <div class="table-responsive">
+                                <table id="zero_config" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Tanggal</th>
+                                            <th>Absen Masuk</th>
+                                            <th>Absen Keluar</th>
+                                            <th>Status</th>
+                                            <th>Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($data as $y)
+                                            <tr>
+                                                <td>{{ $y->tanggal }}</td>
+                                                <td>{{ $y->absen_masuk }}</td>
+                                                <td>{{ $y->absen_keluar }}</td>
+                                                <td>{{ $y->status }}</td>
+                                                <td>{{ $y->ket_ijin }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
                     </div>
                     <!-- card -->
                     <!-- accoridan part -->
@@ -324,6 +347,7 @@
     <script>
         const x = document.getElementById("lokasidevices");
         window.onload = getLocation;
+
         function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(success, error);
@@ -344,134 +368,131 @@
         }
     </script>
 
-<script>
-function getLocationAndSubmit() {
-    const demoDiv = document.getElementById('demo');
-    
-    if (navigator.geolocation) {
-        demoDiv.innerHTML = "Mengambil lokasi...";
-        
-        navigator.geolocation.getCurrentPosition(
-            function(position) {
-                // Set nilai latitude dan longitude
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                
-                document.getElementById('latitude').value = lat;
-                document.getElementById('longitude').value = lng;
-                
-                // Debug: tampilkan nilai
-                console.log('Latitude:', lat);
-                console.log('Longitude:', lng);
-                console.log('Form Latitude:', document.getElementById('latitude').value);
-                console.log('Form Longitude:', document.getElementById('longitude').value);
-                
-                demoDiv.innerHTML = `Lokasi ditemukan: ${lat}, ${lng}`;
-                
-                // Pastikan nilai sudah terisi sebelum submit
-                if (document.getElementById('latitude').value && document.getElementById('longitude').value) {
-                    document.getElementById('absenForm').submit();
-                } else {
-                    alert('Gagal mengisi data lokasi!');
-                }
-            },
-            function(error) {
-                let errorMessage = '';
-                switch(error.code) {
-                    case error.PERMISSION_DENIED:
-                        errorMessage = "Izin akses lokasi ditolak!";
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        errorMessage = "Informasi lokasi tidak tersedia!";
-                        break;
-                    case error.TIMEOUT:
-                        errorMessage = "Waktu permintaan lokasi habis!";
-                        break;
-                    default:
-                        errorMessage = "Terjadi kesalahan: " + error.message;
-                        break;
-                }
-                
-                demoDiv.innerHTML = errorMessage;
-                alert(errorMessage);
-                console.error('Error Geolocation:', error);
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
+    <script>
+        function getLocationAndSubmit() {
+            const demoDiv = document.getElementById('demo');
+
+            if (navigator.geolocation) {
+                demoDiv.innerHTML = "Mengambil lokasi...";
+
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        // Set nilai latitude dan longitude
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+
+                        document.getElementById('latitude').value = lat;
+                        document.getElementById('longitude').value = lng;
+
+                        // Debug: tampilkan nilai
+                        console.log('Latitude:', lat);
+                        console.log('Longitude:', lng);
+                        console.log('Form Latitude:', document.getElementById('latitude').value);
+                        console.log('Form Longitude:', document.getElementById('longitude').value);
+
+                        demoDiv.innerHTML = `Lokasi ditemukan: ${lat}, ${lng}`;
+
+                        // Pastikan nilai sudah terisi sebelum submit
+                        if (document.getElementById('latitude').value && document.getElementById('longitude').value) {
+                            document.getElementById('absenForm').submit();
+                        } else {
+                            alert('Gagal mengisi data lokasi!');
+                        }
+                    },
+                    function(error) {
+                        let errorMessage = '';
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage = "Izin akses lokasi ditolak!";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage = "Informasi lokasi tidak tersedia!";
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage = "Waktu permintaan lokasi habis!";
+                                break;
+                            default:
+                                errorMessage = "Terjadi kesalahan: " + error.message;
+                                break;
+                        }
+
+                        demoDiv.innerHTML = errorMessage;
+                        alert(errorMessage);
+                        console.error('Error Geolocation:', error);
+                    }, {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                demoDiv.innerHTML = "Browser tidak mendukung Geolocation!";
+                alert("Browser Anda tidak mendukung Geolocation!");
             }
-        );
-    } else {
-        demoDiv.innerHTML = "Browser tidak mendukung Geolocation!";
-        alert("Browser Anda tidak mendukung Geolocation!");
-    }
-}
-</script>
-
-<script>
-    function getLocationAndOut() {
-        const demoDiv = document.getElementById('demo');
-        
-        if (navigator.geolocation) {
-            demoDiv.innerHTML = "Mengambil lokasi...";
-            
-            navigator.geolocation.getCurrentPosition(
-                function(position) {
-                    // Set nilai latitude dan longitude
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-                    
-                    document.getElementById('latitude').value = lat;
-                    document.getElementById('longitude').value = lng;
-                    
-                    // Debug: tampilkan nilai
-                    console.log('Latitude:', lat);
-                    console.log('Longitude:', lng);
-                    console.log('Form Latitude:', document.getElementById('latitude').value);
-                    console.log('Form Longitude:', document.getElementById('longitude').value);
-                    
-                    demoDiv.innerHTML = `Lokasi ditemukan: ${lat}, ${lng}`;
-                    
-                    // Pastikan nilai sudah terisi sebelum submit
-                    if (document.getElementById('latitude').value && document.getElementById('longitude').value) {
-                        document.getElementById('absenOut').submit();
-                    } else {
-                        alert('Gagal mengisi data lokasi!');
-                    }
-                },
-                function(error) {
-                    let errorMessage = '';
-                    switch(error.code) {
-                        case error.PERMISSION_DENIED:
-                            errorMessage = "Izin akses lokasi ditolak!";
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            errorMessage = "Informasi lokasi tidak tersedia!";
-                            break;
-                        case error.TIMEOUT:
-                            errorMessage = "Waktu permintaan lokasi habis!";
-                            break;
-                        default:
-                            errorMessage = "Terjadi kesalahan: " + error.message;
-                            break;
-                    }
-                    
-                    demoDiv.innerHTML = errorMessage;
-                    alert(errorMessage);
-                    console.error('Error Geolocation:', error);
-                },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
-                }
-            );
-        } else {
-            demoDiv.innerHTML = "Browser tidak mendukung Geolocation!";
-            alert("Browser Anda tidak mendukung Geolocation!");
         }
-    }
-</script>
+    </script>
 
+    <script>
+        function getLocationAndOut() {
+            const demoDiv = document.getElementById('demo');
+
+            if (navigator.geolocation) {
+                demoDiv.innerHTML = "Mengambil lokasi...";
+
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        // Set nilai latitude dan longitude
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+
+                        document.getElementById('latitude').value = lat;
+                        document.getElementById('longitude').value = lng;
+
+                        // Debug: tampilkan nilai
+                        console.log('Latitude:', lat);
+                        console.log('Longitude:', lng);
+                        console.log('Form Latitude:', document.getElementById('latitude').value);
+                        console.log('Form Longitude:', document.getElementById('longitude').value);
+
+                        demoDiv.innerHTML = `Lokasi ditemukan: ${lat}, ${lng}`;
+
+                        // Pastikan nilai sudah terisi sebelum submit
+                        if (document.getElementById('latitude').value && document.getElementById('longitude').value) {
+                            document.getElementById('absenOut').submit();
+                        } else {
+                            alert('Gagal mengisi data lokasi!');
+                        }
+                    },
+                    function(error) {
+                        let errorMessage = '';
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage = "Izin akses lokasi ditolak!";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage = "Informasi lokasi tidak tersedia!";
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage = "Waktu permintaan lokasi habis!";
+                                break;
+                            default:
+                                errorMessage = "Terjadi kesalahan: " + error.message;
+                                break;
+                        }
+
+                        demoDiv.innerHTML = errorMessage;
+                        alert(errorMessage);
+                        console.error('Error Geolocation:', error);
+                    }, {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                demoDiv.innerHTML = "Browser tidak mendukung Geolocation!";
+                alert("Browser Anda tidak mendukung Geolocation!");
+            }
+        }
+    </script>
 @endsection

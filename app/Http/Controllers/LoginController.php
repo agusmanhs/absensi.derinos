@@ -44,7 +44,7 @@ class LoginController extends Controller
                 return redirect()->route('user.dashboard');
             } else {
                 Auth::logout();
-                dd('test');
+                // dd('test');
                 return redirect()->route('login')->with('login_error', 'Level tidak dikenali.');
             }
         }

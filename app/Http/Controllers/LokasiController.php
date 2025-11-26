@@ -67,16 +67,36 @@ class LokasiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Lokasi $lokasi)
+    public function update(Request $request, $id)
     {
-        //
+        // dd($request->all());
+        $lokasi = Lokasi::findOrFail($id);
+
+        $validated = $request->validate([
+            'nama_lokasi' => 'required',
+            'jam_masuk' => 'required|date_format:H:i',
+            'jam_keluar' => 'required|date_format:H:i',
+            'lokasi' => 'required|string',
+            'batas_jarak' => 'required|numeric',
+        ]);
+
+        if ($request->jam_masuk < $request->jam_keluar) {
+
+            $lokasi->update($validated);
+
+            return redirect()->route('admin.lokasi')->with('success', 'Data lokasi berhasil diperbarui!');
+        } else {
+            return redirect()->route('admin.lokasi')->with('error', 'Jam masuk harus lebih kecil dari jam keluar!');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Lokasi $lokasi)
+    public function destroy(Lokasi $lokasi, $id)
     {
-        //
+        $lokasi = Lokasi::findOrFail($id);
+        $lokasi->delete();
+        return redirect()->route('admin.lokasi')->with('delete', 'Lokasi berhasil dihapus!');
     }
 }
