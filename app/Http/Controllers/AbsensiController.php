@@ -89,6 +89,7 @@ class AbsensiController extends Controller
         
         $lokasikantor = ['latitude' => $lock[0],  'longitude' => $lock[1]];  
         $lokasiuser = ['latitude' => $request['latitude'],  'longitude' => $request['longitude']];  
+        // dd($lokasiuser);
         
         $jaraknya = Helper::howLong($lokasikantor, $lokasiuser);
 
@@ -140,9 +141,90 @@ class AbsensiController extends Controller
     }
 
 public function keluar(Request $request) {
+        $timezone = time()+ (60 * 60 * 8);
+        $tanggal = gmdate('Y-m-d', $timezone);
+        $jam    = gmdate('H:i:s', $timezone);
+        $hari     =  gmdate('l', $timezone);
 
-    return redirect()->route('user.dashboard')->with('warning', 'Anda terlalu jauh dari lokasi kantor untuk melakukan absensi. ');
+        $lokasikantor = Helper::lokasiKantor();
+        $jarakKantor = Helper::jarakKantor();
+        $lock = explode(', ', $lokasikantor);
 
+        $jabatan = Jabatan::where('id', '=', Auth::user()->pegawai->jabatan_id)->first();
+        $jam_kerja = Lokasi::where('id', '=', $jabatan->lokasi_id)->first();
+
+        $lokasikantor = ['latitude' => $lock[0],  'longitude' => $lock[1]];  
+        $lokasiuser = ['latitude' => $request['latitude'],  'longitude' => $request['longitude']];  
+        // dd($lokasiuser);
+        $jaraknya = Helper::howLong($lokasikantor, $lokasiuser);
+
+        $hadir = Absensi::where('user_id', '=', Auth::user()->id)->where('tanggal', '=', $tanggal)->first();
+
+        // dd($hadir->id);
+        if($hari == 'Saturday' or $hari == 'Sunday'){
+            return redirect()->route('user.dashboard')->with('libur', 'Hari ini tuch libur gais sumpah');
+        }
+        else{
+            if($hadir){
+                if($hadir->status == 'izin'){
+                    return redirect()->route('user.dashboard')->with('terimaizin', 'Hari ini anda izin');
+
+                }else{
+                    if($jaraknya > $jarakKantor){
+                        return redirect()->route('user.dashboard')->with('warning', 'Anda terlalu jauh dari lokasi kantor untuk melakukan absensi. ')->with('jaraknya', $jaraknya);
+                    }
+                    else{
+                        // dd(Auth::user()->id);
+                        // $nugu = Absensi::first();
+                        // dd($nugu->user->nama);
+                        $absen = Absensi::findOrFail($hadir->id);
+                        $absen->absen_keluar = $jam;
+                        $absen->lokasi_keluar = $request['lat'].', '.$request['long'];
+                        // dd($jam_kerja);
+                        if($jam < $jam_kerja->jam_keluar){
+                            $absen->ket_keluar = 'cepat pulang';
+                        }
+                        else{
+                            $absen->ket_keluar = 'on time';
+                        }
+                        $absen->update();
+                        return redirect()->route('user.dashboard')->with('success', 'Anda berhasil absen keluar')->with('jaraknya', $jaraknya);
+                    }
+                }
+            }else{
+                return redirect()->route('user.dashboard')->with('absen', 'Anda belum absen masuk!');
+            };
+        }
 }
+
+public function izin(Request $request)
+    {
+        $request->validate([
+            'tanggal' => ['required', 'date', 'after_or_equal:today'],
+            // 'alasan'  => ['required', 'string'],
+            'ket_izin'=> ['required', 'string'],
+
+        ]);
+        $tanggal = gmdate('Y-m-d', time() + (60 * 60 * 8));
+
+        $hadir = Absensi::where('user_id', '=', Auth::user()->id)->where('tanggal', '=', $tanggal)->first();
+        if($hadir){
+            $izin = Absensi::findOrFail($hadir->id);
+                    $izin->ket_izin = $request->input('ket_izin');
+                    $izin->status     = 'pending';
+                    $izin->update();
+        }else{
+            $izin = new Absensi();
+            $izin->user_id    = Auth::user()->id;
+            $izin->tanggal    = $request->input('tanggal');
+            // $izin->alasan     = $request->input('alasan');
+            $izin->ket_izin = $request->input('ket_izin');
+            $izin->status     = 'pending';
+            $izin->save();
+        }
+
+        return redirect()->route('user.dashboard')->with('izin', 'Pengajuan izin berhasil dikirim!');
+
+    }
 
 }

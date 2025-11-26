@@ -159,7 +159,7 @@
                         </div>
 
                     
-                        <div class="card my-3 mx-3" style="border-radius: 12px;">
+                        <div class="card my-3 mx-3" style="border-radius: 12px; cursor: pointer;">
                             <form action="{{ route('absensi.masuk') }}" method="POST" id="absenForm">
                                 @csrf
                                 <input type="hidden" name="latitude" id="latitude">
@@ -179,11 +179,11 @@
                         </div>
 
                     
-                        <div class="card my-3 mx-3" style="border-radius: 12px;">
+                        <div class="card my-3 mx-3" style="border-radius: 12px; cursor: pointer;">
                             <form action="{{ route('absensi.keluar') }}" method="POST" id="absenOut">
                                 @csrf
-                                <input type="hidden" name="latitude" id="latitude">
-                                <input type="hidden" name="longitude" id="longitude">
+                                <input type="hidden" name="latitude" id="lat">
+                                <input type="hidden" name="longitude" id="long">
 
                                 <button type="button" class="box bg-danger w-100 py-3" onclick="getLocationAndOut()"
                                     style="
@@ -199,7 +199,7 @@
                         </div>
 
                     
-                        <div class="card my-3 mx-3" style="border-radius: 12px;">
+                        <div class="card my-3 mx-3" style="border-radius: 12px; cursor: pointer;" data-toggle="modal" data-target="#add-new-event">
                             <button type="button" class="box bg-info w-100 py-3"
                                 style="
                                             color: white;
@@ -297,10 +297,30 @@
                                         @foreach ($data as $y)
                                             <tr>
                                                 <td>{{ $y->tanggal }}</td>
-                                                <td>{{ $y->absen_masuk }}</td>
-                                                <td>{{ $y->absen_keluar }}</td>
-                                                <td>{{ $y->status }}</td>
-                                                <td>{{ $y->ket_ijin }}</td>
+                                                <td class="text-center">
+                                                    @if ($y->ket_masuk=='terlambat')
+                                                        <span class="badge bg-danger rounded-0 text-white"">{{ $y->absen_masuk }}</span>
+                                                    @else  
+                                                        <span class="badge bg-success rounded-0 text-white"">{{ $y->absen_masuk }}</span>
+                                                    @endif
+                                                </td>
+                                                <td class="text-center">
+                                                    @if ($y->ket_keluar == 'cepat pulang')
+                                                        <span class="badge bg-danger rounded-0 text-white"">{{ $y->absen_keluar }}</span>
+                                                    @else
+                                                        <span class="badge bg-success rounded-0 text-white"">{{ $y->absen_keluar }}</span>
+                                                    @endif
+                                                </td>
+                                                <td class="text-center">  
+                                                    @if ($y->status == 'pending')
+                                                        <span class="badge bg-warning rounded-0 text-white"">{{ $y->status }}</span>
+                                                    @elseif ($y->status == 'izin')
+                                                        <span class="badge bg-info rounded-0 text-white"">{{ $y->status }}</span>
+                                                    @else
+                                                        <span class="badge bg-success rounded-0 text-white"">{{ $y->status }}</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{ $y->ket_izin }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -332,6 +352,38 @@
         <!-- End footer -->
         <!-- ============================================================== -->
     </div>
+
+                <div class="modal fade none-border" id="add-new-event">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title"><strong>Pengajuan Izin</strong></h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <form action="{{ route('user.izin') }}" method="POST" enctype="multipart/form-data">
+                                <div class="modal-body">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label for="tanggal" class="control-label">Tanggal</label>
+                                            <input class="form-control form-white" placeholder="Masukkan tanggal" type="date" name="tanggal"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="control-label">Keterangan</label>
+                                            <input class="form-control form-white" placeholder="Masukkan keterangan" type="text" name="ket_izin" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-danger waves-effect waves-light save-category">Save</button>
+                                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
     @if (session('warning'))
         <script>
@@ -445,8 +497,8 @@
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
 
-                        document.getElementById('latitude').value = lat;
-                        document.getElementById('longitude').value = lng;
+                        document.getElementById('lat').value = lat;
+                        document.getElementById('long').value = lng;
 
                         // Debug: tampilkan nilai
                         console.log('Latitude:', lat);
@@ -457,7 +509,7 @@
                         demoDiv.innerHTML = `Lokasi ditemukan: ${lat}, ${lng}`;
 
                         // Pastikan nilai sudah terisi sebelum submit
-                        if (document.getElementById('latitude').value && document.getElementById('longitude').value) {
+                        if (document.getElementById('lat').value && document.getElementById('long').value) {
                             document.getElementById('absenOut').submit();
                         } else {
                             alert('Gagal mengisi data lokasi!');

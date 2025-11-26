@@ -112,6 +112,12 @@
         $('#zero_config').DataTable();
     </script>   
 
+        <script>
+        /****************************************
+         *       Basic Table                   *
+         ****************************************/
+        $('#zero_config1').DataTable();
+    </script>
     @yield('scripts')
 
 </body>

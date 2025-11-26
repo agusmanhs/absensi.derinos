@@ -8,6 +8,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LokasiController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\UserController;
+use App\Models\Absensi;
 use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', [LoginController::class,'index'])->name('login');
@@ -17,6 +18,11 @@ Route::get('logout', [LoginController::class,'logout'])->name('logout');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+
+    Route::post('/admin/terimaizin', [AdminController::class, 'terimaizin'])->name('admin.terima.izin');
+
+
+
 
     Route::get('/admin/pegawai', [PegawaiController::class, 'index'])->name('admin.pegawai');
     Route::post('/admin/pegawai/tambah', [PegawaiController::class, 'store'])->name('admin.tambah.pegawai');
@@ -43,6 +49,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/user/masuk', [AbsensiController::class, 'masuk'])->name('absensi.masuk');
     Route::post('/user/keluar', [AbsensiController::class, 'keluar'])->name('absensi.keluar');
+    Route::post('/user/izin', [AbsensiController::class, 'izin'])->name('user.izin');
+
 
 
 
