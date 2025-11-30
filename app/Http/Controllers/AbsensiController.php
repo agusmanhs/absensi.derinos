@@ -213,6 +213,7 @@ public function izin(Request $request)
         $tanggal = gmdate('Y-m-d', time() + (60 * 60 * 8));
 
         $hadir = Absensi::where('user_id', '=', Auth::user()->id)->where('tanggal', '=', $tanggal)->first();
+        
         if($hadir){
             $izin = Absensi::findOrFail($hadir->id);
                     $izin->ket_izin = $request->input('ket_izin');
