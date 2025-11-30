@@ -3,14 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Absensi;
+use App\Models\Pegawai;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
     public function index() {
         $tanggal = gmdate('Y-m-d', time()+ (60 * 60 * 8));
+
+        $jumlahPegawai = Pegawai::count();
+
+        $totalHadir = Absensi::where('tanggal', '=', $tanggal)->where('status', '=', 'hadir')->count(); 
+        $totalIzin = Absensi::where('tanggal', '=', $tanggal)->where('status', '=', 'izin')->count();;  
+        $totalAbsen = $jumlahPegawai - $totalHadir - $totalIzin; 
 
         $absen = User::leftJoin('absensis as b', function($join) use ($tanggal) {
             $join->on('users.id', '=', 'b.user_id')
@@ -25,7 +34,7 @@ class AdminController extends Controller
         ->orderBy('absensis.tanggal', 'desc')
         ->get();
 
-        return view('admin.dashboard', compact('absen', 'riwayat'));
+        return view('admin.dashboard', compact('absen', 'riwayat', 'jumlahPegawai', 'totalHadir', 'totalIzin', 'totalAbsen'));
     }
 
 
@@ -47,4 +56,71 @@ class AdminController extends Controller
 
         return redirect()->route('admin.dashboard');     
     }
+
+    public function profil(){
+
+        return view('admin.profil');
+    }
+
+    // public function updateprofil(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'name'     => 'required|string',
+    //         'email'    => 'required|email|unique:users,email,' . Auth::id(),
+    //         'password' => 'nullable|string',
+    //         'foto'     => 'nullable|image',   
+    //     ]);
+        
+    //     $user = User::findOrFail(Auth::id());
+        
+    //     $user->name = $validated['name'];
+    //     $user->email = $validated['email'];
+        
+    //     if (!empty($validated['password'])) {
+    //         $user->password = Hash::make($validated['password']);
+    //     }
+        
+    //     $user->save();
+
+    //     if ($request->hasFile('foto')) {
+    //         $pegawai = Pegawai::where('user_id', $user->id)->firstOrFail();
+    //         if ($pegawai->foto && file_exists(public_path('image/' . $pegawai->foto))) {
+    //             unlink(public_path('image/' . $pegawai->foto));
+    //         }
+            
+    //         $namaAsli = $request->file('foto')->getClientOriginalName();
+    //         $namaUnik = time() . '_' . $namaAsli;
+    //         $request->file('foto')->move(public_path('image'), $namaUnik);
+            
+    //         $pegawai->foto = $namaUnik;
+    //         $pegawai->save();
+    //     }
+        
+    //     return redirect()->route('admin.profil')->with('success', 'Profil berhasil diperbarui');
+    // }
+
+
+    public function updateprofil(Request $request)
+{
+    $validated = $request->validate([
+        'name'     => 'required|string',
+        'email'    => 'required|email|unique:users,email,' . Auth::id(),
+        'password' => 'nullable|string',
+    ]);
+    
+    $user = User::findOrFail(Auth::id());
+    
+    $user->name = $validated['name'];
+    $user->email = $validated['email'];
+    
+    if (!empty($validated['password'])) {
+        $user->password = Hash::make($validated['password']);
+    }
+    
+    $user->save();
+
+    return redirect()->route('admin.profil')->with('success', 'Profil berhasil diperbarui');
+}
+
+
 }

@@ -45,7 +45,7 @@
                         <div class="box bg-info text-center">
                             <h1 class="font-light text-white"><i class="mdi mdi-account-multiple"></i></h1>
                             <h6 class="text-white">Total Karyawan</h6>
-                            <h3 class="text-white">0</h3>
+                            <h3 class="text-white">{{ $jumlahPegawai }}</h3>
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                         <div class="box bg-success text-center">
                             <h1 class="font-light text-white"><i class="mdi mdi-check-circle"></i></h1>
                             <h6 class="text-white">Total Hadir</h6>
-                            <h3 class="text-white">0</h3>
+                            <h3 class="text-white">{{ $totalHadir }}</h3>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                         <div class="box bg-warning text-center">
                             <h1 class="font-light text-white"><i class="mdi mdi-alert-circle"></i></h1>
                             <h6 class="text-white">Total Izin</h6>
-                            <h3 class="text-white">0</h3>
+                            <h3 class="text-white">{{ $totalIzin }}</h3>
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                         <div class="box bg-danger text-center">
                             <h1 class="font-light text-white"><i class="mdi mdi-close-circle"></i></h1>
                             <h6 class="text-white">Total Absen</h6>
-                            <h3 class="text-white">0</h3>
+                            <h3 class="text-white">{{ $totalAbsen }}</h3>
                         </div>
                     </div>
                 </div>
@@ -317,7 +317,7 @@
                                                                         <div class="row">
                                                                             <div class="col-md-12">
                                                                                 <label for="alasan" class="control-label">Pengajuan Izin</label>
-                                                                                <select class="form-control form-white" data-placeholder="Choose a color..." name="alasan">
+                                                                                <select class="form-control form-white" data-placeholder="Pilih pengajuan..." name="alasan">
                                                                                     <option value="">-- Pilih --</option>
                                                                                     <option value="izin">izin disetujui</option>
                                                                                     <option value="absen">izin ditolak</option>

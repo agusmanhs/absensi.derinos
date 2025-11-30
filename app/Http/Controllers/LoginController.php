@@ -45,13 +45,13 @@ class LoginController extends Controller
             } else {
                 Auth::logout();
                 // dd('test');
-                return redirect()->route('login')->with('login_error', 'Level tidak dikenali.');
+                return redirect()->route('login')->with('error', 'Level tidak dikenali.');
             }
         }
 
-        // return redirect()->route('login')
-        //     ->with('login_error', 'Email atau Password salah, Silahkan coba lagi')
-        //     ->withInput();
+        return redirect()->route('login')
+            ->with('error', 'Email atau password salah, Silahkan coba lagi')
+            ->withInput();
     }
 
     public function logout(Request $request)

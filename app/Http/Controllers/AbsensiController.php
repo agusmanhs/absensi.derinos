@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Helper;
 use App\Models\Absensi;
 use App\Models\Jabatan;
+use App\Models\Libur;
 use App\Models\Lokasi;
 use App\Models\Pegawai;
 use Illuminate\Http\Request;
@@ -94,18 +95,18 @@ class AbsensiController extends Controller
         $jaraknya = Helper::howLong($lokasikantor, $lokasiuser);
 
         $hadir = Absensi::where('user_id', '=', Auth::user()->id)->where('tanggal', '=', $tanggal)->first();
-        // $liburAll = Libur::get();
+        $liburAll = Libur::get();
 
         $hariIni = date('Y-m-d'); 
-        // $libur = Libur::where('tanggal', $tanggal)->exists();
+        $libur = Libur::where('tanggal', $tanggal)->exists();
 
-        if($hari == 'Sunday'){
+        if($hari == 'Sunday' or $libur){
             return redirect()->route('user.dashboard')->with('info', 'Hari ini libur, Tidak ada jadwal Absensi');
         }
         else{
             if($hadir){
                 if($hadir->status == 'izin'){
-                    return redirect()->route('user.dashboard')->with('terimaizin', 'Hari ini anda izin');
+                    return redirect()->route('user.dashboard')->with('info', 'Hari ini anda izin');
         
                 }else{
                     
@@ -159,15 +160,19 @@ public function keluar(Request $request) {
         $jaraknya = Helper::howLong($lokasikantor, $lokasiuser);
 
         $hadir = Absensi::where('user_id', '=', Auth::user()->id)->where('tanggal', '=', $tanggal)->first();
+        $liburAll = Libur::get();
+
+        $hariIni = date('Y-m-d'); 
+        $libur = Libur::where('tanggal', $tanggal)->exists();
 
         // dd($hadir->id);
-        if($hari == 'Saturday' or $hari == 'Sunday'){
-            return redirect()->route('user.dashboard')->with('libur', 'Hari ini tuch libur gais sumpah');
+        if($hari == 'Sunday' or $libur){
+            return redirect()->route('user.dashboard')->with('info', 'Hari ini libur, Tidak ada jadwal Absensi');
         }
         else{
             if($hadir){
                 if($hadir->status == 'izin'){
-                    return redirect()->route('user.dashboard')->with('terimaizin', 'Hari ini anda izin');
+                    return redirect()->route('user.dashboard')->with('info', 'Hari ini anda izin');
 
                 }else{
                     if($jaraknya > $jarakKantor){
@@ -192,7 +197,7 @@ public function keluar(Request $request) {
                     }
                 }
             }else{
-                return redirect()->route('user.dashboard')->with('absen', 'Anda belum absen masuk!');
+                return redirect()->route('user.dashboard')->with('info', 'Anda belum absen masuk!');
             };
         }
 }
@@ -223,7 +228,7 @@ public function izin(Request $request)
             $izin->save();
         }
 
-        return redirect()->route('user.dashboard')->with('izin', 'Pengajuan izin berhasil dikirim!');
+        return redirect()->route('user.dashboard')->with('success', 'Pengajuan izin berhasil dikirim!');
 
     }
 

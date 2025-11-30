@@ -143,7 +143,7 @@
 
                         <div class="row">
                             <div class="col-md-4 text-center ml-3">
-                                <img src="{{ asset('images/') }}" alt="Foto Karyawan" class="img-fluid"
+                                <img src="{{ asset('image/'.Auth::user()->pegawai->foto) }}" alt="Foto Karyawan" class="img-fluid"
                                     width="250">
                             </div>
 
@@ -503,8 +503,8 @@
                         // Debug: tampilkan nilai
                         console.log('Latitude:', lat);
                         console.log('Longitude:', lng);
-                        console.log('Form Latitude:', document.getElementById('latitude').value);
-                        console.log('Form Longitude:', document.getElementById('longitude').value);
+                        console.log('Form Latitude:', document.getElementById('lat').value);
+                        console.log('Form Longitude:', document.getElementById('long').value);
 
                         demoDiv.innerHTML = `Lokasi ditemukan: ${lat}, ${lng}`;
 

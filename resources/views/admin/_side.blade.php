@@ -10,7 +10,7 @@
                             <ul aria-expanded="false" class="collapse  first-level">
                                 <li class="sidebar-item"><a href="{{ route('admin.jabatan') }}" class="sidebar-link"><i class="mdi mdi-briefcase"></i><span class="hide-menu"> Jabatan </span></a></li>
                                 <li class="sidebar-item"><a href="{{ route('admin.lokasi') }}" class="sidebar-link"><i class="mdi mdi-map-marker"></i><span class="hide-menu"> Kantor </span></a></li>
-                                <li class="sidebar-item"><a href="{{ asset('/matrix-admin/') }}/authentication-register.html" class="sidebar-link"><i class="mdi mdi-calendar"></i><span class="hide-menu"> Libur Nasional </span></a></li>
+                                <li class="sidebar-item"><a href="{{ route('admin.libur') }}" class="sidebar-link"><i class="mdi mdi-calendar"></i><span class="hide-menu"> Libur Nasional </span></a></li>
                             </ul>
                         </li>
                         <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-alert"></i><span class="hide-menu">Errors </span></a>

@@ -87,8 +87,8 @@
                                                 </tr>
 
                                                 
-                                                 {{-- edit --}}
-                                                 <div class="modal fade none-border" id="edit{{ $y->id }}">
+                                                {{-- edit --}}
+                                                <div class="modal fade none-border" id="edit{{ $y->id }}">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -113,7 +113,7 @@
                                                                     <div class="row">
                                                                         <div class="col-md-12">
                                                                             <label class="control-label">Foto</label>
-                                                                            <input class="form-control form-white" placeholder="Masukkan foto" type="file" name="foto" value="{{ $y->nama }}" />
+                                                                            <input class="form-control form-white" accept="image/jpeg, image/png" placeholder="Masukkan foto" type="file" name="foto"/>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row">
@@ -154,7 +154,7 @@
                                                                         </div>
                                                                         <div class="col-md-6">
                                                                             <label class="control-label">Password</label>
-                                                                            <input class="form-control form-white" placeholder="Masukkan password" type="password" name="password" value="{{ $y->password }}" />
+                                                                            <input class="form-control form-white" placeholder="Masukkan password" type="password" name="password"/>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -181,7 +181,7 @@
 
                                                             <div class="row">
                                                                     <div class="col-md-4 text-center">
-                                                                      <img src="{{ asset('images/'.$y->foto) }}" alt="Foto Karyawan" class="img-fluid rounded" width="250">
+                                                                        <img src="{{ asset('image/'.$y->foto) }}" alt="Foto Karyawan" class="img-fluid rounded" width="250">
                                                                     </div>
 
                                                                 <div class="col-md-8">
@@ -190,12 +190,19 @@
                                                                         <li class="list-group-item"><strong>Nama:</strong> {{ $y->nama }}</li>
                                                                         <li class="list-group-item"><strong>Jenis Kelamin:</strong> {{ $y->jenisKelamin }}</li>
                                                                         <li class="list-group-item"><strong>Alamat:</strong> {{ $y->alamat }}</li>
-                                                                        <li class="list-group-item"><strong>Jabatan:</strong> {{ $y->jabatan }}</li>
+                                                                        <li class="list-group-item"><strong>Jabatan:</strong> {{ $y->jabatan->nama_jabatan }}</li>
                                                                         <li class="list-group-item"><strong>No Telp:</strong> {{ $y->notelp }}</li>
                                                                         <li class="list-group-item"><strong>Email:</strong> {{ $y->user->email }}</li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
+                                                            {{-- <div class="col-md-12">
+                                                                    <ul class="list-group list-group-flush">
+                                                                        <li></li>
+                                                                        
+                                                                        <li></li>
+                                                                    </ul>
+                                                            </div> --}}
                                                         </div>
 
                                                             <div class="modal-footer">
@@ -277,7 +284,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label class="control-label">Foto</label>
-                                            <input class="form-control form-white" placeholder="Masukkan foto" type="file" name="foto" />
+                                            <input class="form-control form-white" accept="image/jpeg, image/png" placeholder="Masukkan foto" type="file" name="foto" />
                                         </div>
                                     </div>
                                     <div class="row">
@@ -298,7 +305,7 @@
                                         <div class="col-md-12">
                                             <label class="control-label">Jabatan</label>
                                             <select class="form-control form-white" data-placeholder="Choose a color..." name="jabatan">
-                                                 @foreach ($jabatan as $a)
+                                                @foreach ($jabatan as $a)
                                                     <option value="{{ $a->id }}">{{ $a->nama_jabatan }}</option>
                                                 @endforeach
                                             </select>

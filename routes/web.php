@@ -3,6 +3,7 @@
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\JabatanController;
+use App\Http\Controllers\LiburController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LokasiController;
@@ -18,6 +19,10 @@ Route::get('logout', [LoginController::class,'logout'])->name('logout');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/profil', [AdminController::class, 'profil'])->name('admin.profil');
+    Route::post('/admin/updateprofil', [AdminController::class, 'updateprofil'])->name('admin.update.profil');
+
+
 
     Route::post('/admin/terimaizin', [AdminController::class, 'terimaizin'])->name('admin.terima.izin');
 
@@ -39,6 +44,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/admin/jabatan/update/{id}', [JabatanController::class, 'update'])->name('admin.update.jabatan');
     Route::delete('/admin/jabatan/delete/{id}', [JabatanController::class, 'destroy'])->name('admin.delete.jabatan');
 
+    Route::get('/admin/libur', [LiburController::class, 'index'])->name('admin.libur');
+    Route::post('/admin/libur/tambah', [LiburController::class, 'store'])->name('admin.tambah.libur');
+    Route::delete('/admin/libur/delete/{id}', [LiburController::class, 'destroy'])->name('admin.delete.libur');
+
+
+
+
 
 
 });
@@ -46,10 +58,15 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/user', [UserController::class, 'index'])->name('user.dashboard');
+    Route::get('/user/profil', [UserController::class, 'profil'])->name('user.profil');
+    Route::post('/user/updateprofil', [UserController::class, 'updateprofil'])->name('user.update.profil');
+
 
     Route::post('/user/masuk', [AbsensiController::class, 'masuk'])->name('absensi.masuk');
     Route::post('/user/keluar', [AbsensiController::class, 'keluar'])->name('absensi.keluar');
     Route::post('/user/izin', [AbsensiController::class, 'izin'])->name('user.izin');
+
+
 
 
 

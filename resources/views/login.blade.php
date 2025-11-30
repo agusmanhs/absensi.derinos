@@ -18,7 +18,10 @@
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+
+    
+    <![endif]-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -145,12 +148,15 @@
     });
     </script>
 
-    @if(session('login_error'))
+    @if(session('error'))
     <script>
         Swal.fire({
             title: 'Oopss..',
             icon: 'error',
-            text: '{{ session("login_error") }}'
+            text: '{{ session("error") }}',
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true,
         });
     </script>
     @endif

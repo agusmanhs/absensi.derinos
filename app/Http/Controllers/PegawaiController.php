@@ -39,7 +39,6 @@ class PegawaiController extends Controller
         try {
             DB::beginTransaction();
 
-            // 1. Buat User terlebih dahulu
             $user = User::create([
                 'name' => $request->nama,
                 'email' => $request->email,
@@ -47,7 +46,13 @@ class PegawaiController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            // 2. Buat Pegawai dengan user_id dari user yang baru dibuat
+            $fotoName = null;
+                if ($request->hasFile('foto')) {
+                    $foto = $request->file('foto');
+                    $fotoName = time() . '_' . $foto->getClientOriginalName();
+                    $foto->move(public_path('image'), $fotoName);
+                }   
+
             $pegawai = Pegawai::create([
                 'user_id' => $user->id,
                 'jabatan_id' => $request->jabatan,
@@ -56,6 +61,7 @@ class PegawaiController extends Controller
                 'jenisKelamin' => $request->jenisKelamin,
                 'notelp' => $request->notelp,
                 'alamat' => $request->alamat,
+                'foto' => $fotoName,
             ]);
             DB::commit();
 
@@ -112,13 +118,25 @@ class PegawaiController extends Controller
                 ]);
             }
 
+            $fotoName = $pegawai->foto; 
+            if ($request->hasFile('foto')) {
+                if ($pegawai->foto && file_exists(public_path('image/' . $pegawai->foto))) {
+                    unlink(public_path('image/' . $pegawai->foto));
+                }
+                
+                $foto = $request->file('foto');
+                $fotoName = time() . '_' . $foto->getClientOriginalName();
+                $foto->move(public_path('image'), $fotoName);
+            }
+
             $pegawai->update([
                 'nik' => $request->nik,
                 'nama' => $request->nama,
-                'jabatan' => $request->jabatan,
+                'jabatan_id' => $request->jabatan,
                 'jenisKelamin' => $request->jenisKelamin,
                 'notelp' => $request->notelp,
                 'alamat' => $request->alamat,
+                'foto' => $fotoName,
             ]);
 
             DB::commit();
@@ -144,6 +162,11 @@ class PegawaiController extends Controller
     public function destroy(Pegawai $pegawai, $id)
     {
         $pegawai = Pegawai::findOrFail($id);
+
+        if ($pegawai->user) {
+        $pegawai->user->delete();
+        }
+        
         $pegawai->delete();
         return redirect()->route('admin.pegawai')->with('delete', 'Data pegawai berhasil dihapus!');
     }

@@ -20,6 +20,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <link href="{{ asset('/matrix-admin/') }}/assets/libs/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet" />
+    <link href="{{ asset('/matrix-admin/') }}/assets/extra-libs/calendar/calendar.css" rel="stylesheet" />
+
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -100,11 +104,19 @@
     <script src="{{ asset('/matrix-admin/') }}/assets/libs/flot/jquery.flot.crosshair.js"></script>
     <script src="{{ asset('/matrix-admin/') }}/assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
     <script src="{{ asset('/matrix-admin/') }}/dist/js/pages/chart/chart-page-init.js"></script>
-
-
+    
+    
     <script src="{{ asset('/matrix-admin/') }}/assets/extra-libs/multicheck/datatable-checkbox-init.js"></script>
     <script src="{{ asset('/matrix-admin/') }}/assets/extra-libs/multicheck/jquery.multicheck.js"></script>
     <script src="{{ asset('/matrix-admin/') }}/assets/extra-libs/DataTables/datatables.min.js"></script>
+    
+    <script src="{{ asset('/matrix-admin/') }}/dist/js/jquery.ui.touch-punch-improved.js"></script>
+    <script src="{{ asset('/matrix-admin/') }}/dist/js/jquery-ui.min.js"></script>
+    
+    <script src="{{ asset('/matrix-admin/') }}/assets/libs/moment/min/moment.min.js"></script>
+    <script src="{{ asset('/matrix-admin/') }}/assets/libs/fullcalendar/dist/fullcalendar.min.js"></script>
+    <script src="{{ asset('/matrix-admin/') }}/dist/js/pages/calendar/cal-init.js"></script>
+
     <script>
         /****************************************
          *       Basic Table                   *
@@ -118,7 +130,52 @@
          ****************************************/
         $('#zero_config1').DataTable();
     </script>
-    @yield('scripts')
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if(session('warning'))
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'Perhatian!',
+                text: '{{ session('warning') }}',
+            });
+        </script>
+    @endif
+    @if(session('info'))
+        <script>
+            Swal.fire({
+                icon: 'info',
+                title: 'Informasi!',
+                text: '{{ session('info') }}',
+            });
+        </script>
+    @endif
+    @if(session('delete'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Informasi!',
+                text: '{{ session('delete') }}',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+            });
+        </script>
+    @endif
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+            });
+        </script>
+    @endif
 
 </body>
 

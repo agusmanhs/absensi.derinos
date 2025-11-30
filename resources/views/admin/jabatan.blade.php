@@ -168,7 +168,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title"><strong>Add</strong> a category</h4>
+                                <h4 class="modal-title"><strong>Tambah Jabatan</strong></h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             </div>
                             <form action="{{ route('admin.tambah.jabatan') }}" method="POST" enctype="multipart/form-data">
@@ -211,9 +211,9 @@
             <form id="form-hapus" method="POST" action="" style="display: none;">
                 @csrf
                 @method('DELETE')
-              </form>
-              
-              <script>
+            </form>
+            
+            <script>
                 function hapusJabatan(id) {
                     if (confirm('Apakah anda yakin ingin menghapus?')) {
                 
