@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LokasiController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Models\Absensi;
 use Illuminate\Support\Facades\Artisan;
@@ -21,7 +22,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/profil', [AdminController::class, 'profil'])->name('admin.profil');
     Route::post('/admin/updateprofil', [AdminController::class, 'updateprofil'])->name('admin.update.profil');
-
 
 
     Route::post('/admin/terimaizin', [AdminController::class, 'terimaizin'])->name('admin.terima.izin');
@@ -47,6 +47,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin/libur', [LiburController::class, 'index'])->name('admin.libur');
     Route::post('/admin/libur/tambah', [LiburController::class, 'store'])->name('admin.tambah.libur');
     Route::delete('/admin/libur/delete/{id}', [LiburController::class, 'destroy'])->name('admin.delete.libur');
+
+    Route::get('/admin/report/harian', [ReportController::class, 'index'])->name('admin.report.harian');
+    Route::get('/admin/report/bulanan', [ReportController::class, 'reportbulanan'])->name('admin.report.bulanan');
+    Route::get('/admin/pdf/harian', [ReportController::class, 'pdfharian'])->name('admin.pdf.harian');
+
 
 
 
