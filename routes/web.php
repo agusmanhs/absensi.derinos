@@ -49,8 +49,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('/admin/libur/delete/{id}', [LiburController::class, 'destroy'])->name('admin.delete.libur');
 
     Route::get('/admin/report/harian', [ReportController::class, 'index'])->name('admin.report.harian');
-    Route::get('/admin/report/bulanan', [ReportController::class, 'reportbulanan'])->name('admin.report.bulanan');
     Route::get('/admin/pdf/harian', [ReportController::class, 'pdfharian'])->name('admin.pdf.harian');
+
+    Route::get('/admin/report/bulanan', [ReportController::class, 'reportbulanan'])->name('admin.report.bulanan');
+    Route::get('/admin/pdf/bulanan', [ReportController::class, 'pdfbulanan'])->name('admin.pdf.bulanan');
+
 
 
 

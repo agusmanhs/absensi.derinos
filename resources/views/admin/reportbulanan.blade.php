@@ -113,9 +113,47 @@
                                         {{ session('error') }}
                                     </div>
                                 @endif
-                                <div class="d-flex justify-content-start align-items-center" style="margin-bottom: 20px;">
-                                    <h5 class="card-title">History Absensi</h5>
+                                {{-- <div class="d-flex justify-content-end align-items-center mb-3">
+
+                                    <form action="{{ route('admin.report.bulanan') }}" method="GET" class="d-flex align-items-center gap-2">
+                                        <input type="month" name="bulan" 
+                                               class="form-control"
+                                               value="{{ request('bulan') }}">
+                                        <button class="btn btn-info">Filter</button>
+                                    </form>
+                                
+                                    <div class="d-flex align-items-center gap-2">
+
+                                        <a href="{{ route('admin.pdf.bulanan', ['bulan' => request('bulan')]) }}" 
+                                           target="_blank" 
+                                           class="btn btn-secondary m-t-20 btn-block waves-effect waves-light">
+                                            Cetak PDF
+                                        </a>
+                                    </div>
+                                
+                                </div> --}}
+                                <div class="d-flex justify-content-end align-items-center mb-3 gap-3">
+
+                                    <form action="{{ route('admin.report.bulanan') }}" method="GET" 
+                                          class="d-flex align-items-center gap-2">
+                                        
+                                        <input type="month" name="bulan" 
+                                               class="form-control form-control-sm"
+                                               value="{{ request('bulan') }}">
+                                        
+                                        <button class="btn btn-info btn-sm">Filter</button>
+                                    </form>
+                                
+                                    <a href="{{ route('admin.pdf.bulanan', ['bulan' => request('bulan')]) }}" 
+                                       target="_blank" 
+                                       class="btn btn-secondary btn-sm ml-2">
+                                        Cetak PDF
+                                    </a>
+                                
                                 </div>
+                                
+                                
+                                
                                 <div class="table-responsive">
                                     <table id="zero_config1" class="table table-striped table-bordered">
                                         <thead>
@@ -134,10 +172,10 @@
                                                     <td>{{ $a->tanggal }}</td>
                                                     <td>{{ $a->name }}</td>
                                                     <td class="text-center">
-                                                        <span class="badge bg-success rounded-0 text-white"">{{ $a->absen_masuk }}</span>
+                                                        <span class="badge bg-success rounded-0 text-white">{{ $a->absen_masuk }}</span>
                                                     </td>
                                                     <td class="text-center">
-                                                        <span class="badge bg-success rounded-0 text-white"">{{ $a->absen_keluar }}</span>
+                                                        <span class="badge bg-success rounded-0 text-white">{{ $a->absen_keluar }}</span>
                                                     </td>
                                                     <td>{{ $a->status }}</td>
                                                     <td>{{ $a->ket_izin }}</td>

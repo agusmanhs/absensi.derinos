@@ -118,10 +118,10 @@
                                             {{-- <button type="button" class="btn btn-info text-white">
                                                 Tambah Pegawai
                                             </button> --}}
-                                            <a href="{{ route('admin.pdf.harian') }}" target="_blank" class="btn m-t-20 btn-secondary btn-block waves-effect waves-light">
+                                            <a href="{{ route('admin.pdf.harian') }}" target="_blank" class="btn btn-secondary btn-sm">
                                                         Cetak PDF
                                             </a>
-                                        </div>
+                                    </div>
 
 
                                 </div>

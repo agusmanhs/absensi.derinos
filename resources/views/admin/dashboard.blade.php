@@ -374,10 +374,10 @@
                                                     <td>{{ $a->tanggal }}</td>
                                                     <td>{{ $a->name }}</td>
                                                     <td class="text-center">
-                                                        <span class="badge bg-success rounded-0 text-white"">{{ $a->absen_masuk }}</span>
+                                                        <span class="badge bg-success rounded-0 text-white">{{ $a->absen_masuk }}</span>
                                                     </td>
                                                     <td class="text-center">
-                                                        <span class="badge bg-success rounded-0 text-white"">{{ $a->absen_keluar }}</span>
+                                                        <span class="badge bg-success rounded-0 text-white">{{ $a->absen_keluar }}</span>
                                                     </td>
                                                     <td>{{ $a->status }}</td>
                                                     <td>{{ $a->ket_izin }}</td>
