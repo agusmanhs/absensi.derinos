@@ -85,6 +85,17 @@
             /* padding: 8px 10px; */
             text-align: left;
         }
+
+        .header-libur {
+            background-color: #fd5050 !important;
+            color: #ffffff !important;
+            font-weight: bold;
+        }
+
+        .libur {
+            background-color: #fcaeae !important;
+            color: #cc0000 !important;
+        }
     </style>
 
 
@@ -108,16 +119,15 @@
         <tr>
             <th>Nama</th>
 
-            @foreach ($dates as $tgl)
-                <th>{{ $tgl }}</th>
+            @foreach ($dates as $date)
+                <th class="{{ $date['is_libur'] ? 'header-libur' : '' }}">
+                    {{ $date['day'] }}
+                </th>
             @endforeach
 
             <th>Total Hadir</th>
         </tr>
-        </thead>
-
         <tbody>
-
             @foreach ($pegawai as $p)
                 <tr>
                     <td>{{ $p->name }}</td>
@@ -126,35 +136,33 @@
                         $totalHadir = 0;
                     @endphp
 
-                    @foreach ($dates as $tgl)
+                    @foreach ($dates as $date)
                         @php
-                            $status = $rekap[$p->id][$tgl];
+                            $status = $rekap[$p->id][$date['day']];
 
                             if ($status === 'hadir') {
                                 $totalHadir++;
                             }
+
+                            $symbol = '-';
+
+                            if ($status === 'hadir') {
+                                $symbol = 'H';
+                            } elseif ($status === 'izin') {
+                                $symbol = 'I';
+                            }
                         @endphp
 
-                        @php
-                        $symbol = '-';
-
-                        if ($status === 'hadir') {
-                            $symbol = 'H';
-                        } elseif ($status === 'izin') {
-                            $symbol = 'I';
-                        }
-                        @endphp
-
-                        <td>{{ $symbol }}</td>
-                         
+                        <td class="{{ $date['is_libur'] ? 'libur' : '' }}">
+                            {{ $symbol }}
+                        </td>
                     @endforeach
 
                     <td>{{ $totalHadir }}</td>
-
                 </tr>
             @endforeach
+        </tbody>
     </table>
-
 </body>
 
 </html>
