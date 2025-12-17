@@ -53,6 +53,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/admin/report/bulanan', [ReportController::class, 'reportbulanan'])->name('admin.report.bulanan');
     Route::get('/admin/pdf/bulanan', [ReportController::class, 'pdfbulanan'])->name('admin.pdf.bulanan');
+    Route::get('/admin/pdf/pegawai', [ReportController::class, 'pdfpegawai'])->name('admin.pdf.pegawai');
 
 
 

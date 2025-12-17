@@ -164,6 +164,7 @@
                                                 <th>Absen Keluar</th>
                                                 <th>Status</th>
                                                 <th>Keterangan</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -179,6 +180,16 @@
                                                     </td>
                                                     <td>{{ $a->status }}</td>
                                                     <td>{{ $a->ket_izin }}</td>
+                                                    <td class="text-center">
+                                                        <a href="{{ route('admin.pdf.pegawai', [
+                                                                'pegawai_id' => $a->user_id,
+                                                                'bulan' => request('bulan')
+                                                            ]) }}"
+                                                           target="_blank"
+                                                           class="btn btn-secondary btn-sm">
+                                                           <i class="fa fa-print"></i>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

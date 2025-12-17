@@ -43,14 +43,12 @@
             padding: 5px;
             letter-spacing: 1px;
             border-bottom: 1px solid #48494a;
-
         }
 
         .table2 {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-
         }
 
         .table2 th {
@@ -60,6 +58,7 @@
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
             padding: 7px 5px;
+            font-size: 10px;
         }
 
         .table2 td {
@@ -70,6 +69,7 @@
             font-weight: 400;
             padding: 5px;
             border-bottom: 1px solid #0b0b0b;
+            font-size: 9px;
         }
 
         .table2 tr:hover td {
@@ -82,7 +82,6 @@
 
         th,
         td {
-            /* padding: 8px 10px; */
             text-align: left;
         }
 
@@ -97,8 +96,6 @@
             color: #cc0000 !important;
         }
     </style>
-
-
 </head>
 
 <body>
@@ -138,7 +135,7 @@
 
                     @foreach ($dates as $date)
                         @php
-                            $status = $rekap[$p->id][$date['day']];
+                            $status = $rekap[$p->id][$date['full_date']] ?? '-';
 
                             if ($status === 'hadir') {
                                 $totalHadir++;
