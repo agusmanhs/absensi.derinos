@@ -116,60 +116,60 @@ class ReportController extends Controller
     //     return $pdf->stream('reportbulanan.pdf');
     // }
     public function pdfbulanan(Request $request)
-{
-    $bulan = $request->bulan ? date('m', strtotime($request->bulan)) : date('m');
-    $tahun = $request->bulan ? date('Y', strtotime($request->bulan)) : date('Y');
+    {
+        $bulan = $request->bulan ? date('m', strtotime($request->bulan)) : date('m');
+        $tahun = $request->bulan ? date('Y', strtotime($request->bulan)) : date('Y');
 
-    $tanggalMulai = \Carbon\Carbon::createFromDate($tahun, $bulan, 1)->subMonth()->day(25);
-    $tanggalSelesai = \Carbon\Carbon::createFromDate($tahun, $bulan, 24);
+        $tanggalMulai = \Carbon\Carbon::createFromDate($tahun, $bulan, 1)->subMonth()->day(25);
+        $tanggalSelesai = \Carbon\Carbon::createFromDate($tahun, $bulan, 24);
 
-    $bulan1 = $tanggalMulai->translatedFormat('d F Y') . ' - ' . $tanggalSelesai->translatedFormat('d F Y');
+        $bulan1 = $tanggalMulai->translatedFormat('d F Y') . ' - ' . $tanggalSelesai->translatedFormat('d F Y');
 
-    $liburNasional = \App\Models\Libur::whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
-        ->pluck('tanggal')
-        ->toArray();
+        $liburNasional = \App\Models\Libur::whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
+            ->pluck('tanggal')
+            ->toArray();
 
-    $dates = [];
-    $currentDate = $tanggalMulai->copy();
-    
-    while ($currentDate <= $tanggalSelesai) {
-        $isHoliday = in_array($currentDate->format('Y-m-d'), $liburNasional);
-        
-        $dates[] = [
-            'day' => $currentDate->day,
-            'month' => $currentDate->month,
-            'year' => $currentDate->year,
-            'full_date' => $currentDate->format('Y-m-d'),
-            'is_sunday' => $currentDate->isSunday(),
-            'is_holiday' => $isHoliday,
-            'is_libur' => $currentDate->isSunday() || $isHoliday
-        ];
-        
-        $currentDate->addDay();
-    }
+        $dates = [];
+        $currentDate = $tanggalMulai->copy();
 
-    $pegawai = User::orderBy('name')->get();
+        while ($currentDate <= $tanggalSelesai) {
+            $isHoliday = in_array($currentDate->format('Y-m-d'), $liburNasional);
 
-    $absen = DB::table('absensis')
-        ->whereBetween('tanggal', [$tanggalMulai->format('Y-m-d'), $tanggalSelesai->format('Y-m-d')])
-        ->get();
+            $dates[] = [
+                'day' => $currentDate->day,
+                'month' => $currentDate->month,
+                'year' => $currentDate->year,
+                'full_date' => $currentDate->format('Y-m-d'),
+                'is_sunday' => $currentDate->isSunday(),
+                'is_holiday' => $isHoliday,
+                'is_libur' => $currentDate->isSunday() || $isHoliday
+            ];
 
-    $rekap = [];
-    foreach ($pegawai as $p) {
-        foreach ($dates as $date) {
-            $rekap[$p->id][$date['full_date']] = '-';
+            $currentDate->addDay();
         }
+
+        $pegawai = User::orderBy('name')->get();
+
+        $absen = DB::table('absensis')
+            ->whereBetween('tanggal', [$tanggalMulai->format('Y-m-d'), $tanggalSelesai->format('Y-m-d')])
+            ->get();
+
+        $rekap = [];
+        foreach ($pegawai as $p) {
+            foreach ($dates as $date) {
+                $rekap[$p->id][$date['full_date']] = '-';
+            }
+        }
+
+        foreach ($absen as $a) {
+            $rekap[$a->user_id][$a->tanggal] = $a->status;
+        }
+
+        $pdf = Pdf::loadView('admin.pdfbulanan', compact('pegawai', 'dates', 'rekap', 'bulan1'))
+            ->setPaper('a4', 'landscape');
+
+        return $pdf->stream('reportbulanan.pdf');
     }
-
-    foreach ($absen as $a) {
-        $rekap[$a->user_id][$a->tanggal] = $a->status;
-    }
-
-    $pdf = Pdf::loadView('admin.pdfbulanan', compact('pegawai', 'dates', 'rekap', 'bulan1'))
-        ->setPaper('a4', 'landscape');
-
-    return $pdf->stream('reportbulanan.pdf');
-}
 
 
     // public function pdfPegawai(Request $request)
@@ -178,39 +178,66 @@ class ReportController extends Controller
     //     $tahun = $request->bulan ? date('Y', strtotime($request->bulan)) : date('Y');
     //     $pegawaiId = $request->pegawai_id;
 
-    //     $bulan1 = \Carbon\Carbon::createFromDate($tahun, $bulan, 1)
-    //         ->translatedFormat('F Y');
+    //     $tanggalMulai = \Carbon\Carbon::createFromDate($tahun, $bulan, 1)->subMonth()->day(25);
+    //     $tanggalSelesai = \Carbon\Carbon::createFromDate($tahun, $bulan, 24);
 
-    //     $daysInMonth = \Carbon\Carbon::create($tahun, $bulan, 1)->daysInMonth;
+    //     $bulan1 = $tanggalMulai->translatedFormat('d F Y') . ' - ' . $tanggalSelesai->translatedFormat('d F Y');
 
     //     $pegawai = User::findOrFail($pegawaiId);
 
-    //     $liburNasional = Libur::whereYear('tanggal', $tahun)
-    //         ->whereMonth('tanggal', $bulan)
+    //     $liburNasional = Libur::whereBetween('tanggal', [$tanggalMulai->format('Y-m-d'), $tanggalSelesai->format('Y-m-d')])
     //         ->pluck('tanggal')
-    //         ->map(function ($date) {
-    //             return \Carbon\Carbon::parse($date)->day;
-    //         })
     //         ->toArray();
 
     //     $absen = DB::table('absensis')
     //         ->where('user_id', $pegawaiId)
-    //         ->whereMonth('tanggal', $bulan)
-    //         ->whereYear('tanggal', $tahun)
+    //         ->whereBetween('tanggal', [$tanggalMulai->format('Y-m-d'), $tanggalSelesai->format('Y-m-d')])
     //         ->get();
 
     //     $rekap = [];
-    //     for ($i = 1; $i <= $daysInMonth; $i++) {
-    //         $tanggal = sprintf('%s-%s-%02d', $tahun, $bulan, $i);
-    //         $currentDate = \Carbon\Carbon::create($tahun, $bulan, $i);
+    //     $currentDate = $tanggalMulai->copy();
+    //     $index = 1;
+
+    //     $jamKeluarStandar = '10:00'; 
+
+    //     while ($currentDate <= $tanggalSelesai) {
+    //         $tanggal = $currentDate->format('Y-m-d');
     //         $data = $absen->firstWhere('tanggal', $tanggal);
 
-
     //         $isSunday = $currentDate->isSunday();
-    //         $isLiburNasional = in_array($i, $liburNasional);
+    //         $isLiburNasional = in_array($tanggal, $liburNasional);
     //         $isLibur = $isSunday || $isLiburNasional;
 
-    //         $rekap[$i] = [
+    //         $ketLembur = '-';
+    //         $jamLembur = 0;
+
+    //         if ($data && isset($data->absen_keluar) && $data->absen_keluar && $data->absen_keluar !== '-') {
+    //             try {
+    //                 $absenKeluarTime = $data->absen_keluar;
+
+    //                 if (strlen($absenKeluarTime) > 8) {
+    //                     $jamKeluar = \Carbon\Carbon::parse($absenKeluarTime);
+    //                 } else {
+    //                     $jamKeluar = \Carbon\Carbon::parse($tanggal . ' ' . $absenKeluarTime);
+    //                 }
+
+    //                 $jamStandar = \Carbon\Carbon::parse($tanggal . ' ' . $jamKeluarStandar);
+
+    //                 if ($jamKeluar->greaterThan($jamStandar)) {
+    //                     $selisihMenit = $jamStandar->diffInMinutes($jamKeluar);
+
+    //                     $jamLembur = floor($selisihMenit / 60);
+
+    //                     if ($jamLembur > 0) {
+    //                         $ketLembur = 'Lembur ' . $jamLembur . ' jam';
+    //                     }
+    //                 }
+    //             } catch (\Exception $e) {
+    //                 $ketLembur = '-';
+    //             }
+    //         }
+
+    //         $rekap[$index] = [
     //             'tanggal' => $tanggal,
     //             'absen_masuk' => $data->absen_masuk ?? '-',
     //             'ket_masuk' => $data->ket_masuk ?? '-',
@@ -218,73 +245,137 @@ class ReportController extends Controller
     //             'ket_keluar' => $data->ket_keluar ?? '-',
     //             'status' => $data->status ?? 'tidak hadir',
     //             'ket_izin' => $data->ket_izin ?? '-',
+    //             'ket_lembur' => $ketLembur,
+    //             'jam_lembur' => $jamLembur,
     //             'is_libur' => $isLibur,
     //             'is_sunday' => $isSunday,
     //             'is_holiday' => $isLiburNasional,
     //         ];
 
+    //         $currentDate->addDay();
+    //         $index++;
     //     }
 
     //     $pdf = Pdf::loadView('admin.pdfpegawai', compact('pegawai', 'rekap', 'bulan1'))
     //         ->setPaper('a4', 'portrait');
 
-    //     return $pdf->stream('reportbulanan');
+    //     return $pdf->stream('reportbulanan.pdf');
     // }
 
     public function pdfPegawai(Request $request)
-{
-    $bulan = $request->bulan ? date('m', strtotime($request->bulan)) : date('m');
-    $tahun = $request->bulan ? date('Y', strtotime($request->bulan)) : date('Y');
-    $pegawaiId = $request->pegawai_id;
+    {
+        $bulan = $request->bulan ? date('m', strtotime($request->bulan)) : date('m');
+        $tahun = $request->bulan ? date('Y', strtotime($request->bulan)) : date('Y');
+        $pegawaiId = $request->pegawai_id;
 
-    $tanggalMulai = \Carbon\Carbon::createFromDate($tahun, $bulan, 1)->subMonth()->day(25);
-    $tanggalSelesai = \Carbon\Carbon::createFromDate($tahun, $bulan, 24);
+        $tanggalMulai = \Carbon\Carbon::createFromDate($tahun, $bulan, 1)->subMonth()->day(25);
+        $tanggalSelesai = \Carbon\Carbon::createFromDate($tahun, $bulan, 24);
 
-    $bulan1 = $tanggalMulai->translatedFormat('d F Y') . ' - ' . $tanggalSelesai->translatedFormat('d F Y');
+        $bulan1 = $tanggalMulai->translatedFormat('d F Y') . ' - ' . $tanggalSelesai->translatedFormat('d F Y');
 
-    $pegawai = User::findOrFail($pegawaiId);
+        $pegawai = User::findOrFail($pegawaiId);
 
-    $liburNasional = Libur::whereBetween('tanggal', [$tanggalMulai->format('Y-m-d'), $tanggalSelesai->format('Y-m-d')])
-        ->pluck('tanggal')
-        ->toArray();
+        $dataPegawai = DB::table('pegawais')
+            ->where('user_id', $pegawaiId)
+            ->first();
 
-    $absen = DB::table('absensis')
-        ->where('user_id', $pegawaiId)
-        ->whereBetween('tanggal', [$tanggalMulai->format('Y-m-d'), $tanggalSelesai->format('Y-m-d')])
-        ->get();
+        $jamKeluarLokasi = null;
+        if ($dataPegawai && $dataPegawai->jabatan_id) {
+            $jabatan = DB::table('jabatans')
+                ->where('id', $dataPegawai->jabatan_id)
+                ->first();
 
-    $rekap = [];
-    $currentDate = $tanggalMulai->copy();
-    $index = 1;
+            if ($jabatan && $jabatan->lokasi_id) {
+                $lokasiPegawai = DB::table('lokasis')
+                    ->where('id', $jabatan->lokasi_id)
+                    ->first();
+                $jamKeluarLokasi = $lokasiPegawai ? $lokasiPegawai->jam_keluar : null;
+            }
+        }
 
-    while ($currentDate <= $tanggalSelesai) {
-        $tanggal = $currentDate->format('Y-m-d');
-        $data = $absen->firstWhere('tanggal', $tanggal);
+        $liburNasional = Libur::whereBetween('tanggal', [$tanggalMulai->format('Y-m-d'), $tanggalSelesai->format('Y-m-d')])
+            ->pluck('tanggal')
+            ->toArray();
 
-        $isSunday = $currentDate->isSunday();
-        $isLiburNasional = in_array($tanggal, $liburNasional);
-        $isLibur = $isSunday || $isLiburNasional;
+        $absen = DB::table('absensis')
+            ->where('user_id', $pegawaiId)
+            ->whereBetween('tanggal', [$tanggalMulai->format('Y-m-d'), $tanggalSelesai->format('Y-m-d')])
+            ->get();
 
-        $rekap[$index] = [
-            'tanggal' => $tanggal,
-            'absen_masuk' => $data->absen_masuk ?? '-',
-            'ket_masuk' => $data->ket_masuk ?? '-',
-            'absen_keluar' => $data->absen_keluar ?? '-',
-            'ket_keluar' => $data->ket_keluar ?? '-',
-            'status' => $data->status ?? 'tidak hadir',
-            'ket_izin' => $data->ket_izin ?? '-',
-            'is_libur' => $isLibur,
-            'is_sunday' => $isSunday,
-            'is_holiday' => $isLiburNasional,
-        ];
 
-        $currentDate->addDay();
-        $index++;
+        // dd([
+        //     'user_id' => $pegawaiId,
+        //     'data_pegawai' => $dataPegawai,
+        //     'jam_keluar_lokasi' => $jamKeluarLokasi
+        // ]);
+
+        $rekap = [];
+        $currentDate = $tanggalMulai->copy();
+        $index = 1;
+
+        while ($currentDate <= $tanggalSelesai) {
+            $tanggal = $currentDate->format('Y-m-d');
+            $data = $absen->firstWhere('tanggal', $tanggal);
+
+            $isSunday = $currentDate->isSunday();
+            $isLiburNasional = in_array($tanggal, $liburNasional);
+            $isLibur = $isSunday || $isLiburNasional;
+
+            $ketLembur = '-';
+            $jamLembur = 0;
+
+            if (
+                $data && isset($data->absen_keluar) && $data->absen_keluar &&
+                $data->absen_keluar !== '-' && $jamKeluarLokasi
+            ) {
+
+                try {
+                    $absenKeluarTime = $data->absen_keluar;
+
+                    if (strlen($absenKeluarTime) > 8) {
+                        $jamKeluar = \Carbon\Carbon::parse($absenKeluarTime);
+                    } else {
+                        $jamKeluar = \Carbon\Carbon::parse($tanggal . ' ' . $absenKeluarTime);
+                    }
+
+                    $jamKeluarStandar = \Carbon\Carbon::parse($tanggal . ' ' . $jamKeluarLokasi);
+
+                    if ($jamKeluar->greaterThan($jamKeluarStandar)) {
+                        $selisihMenit = $jamKeluarStandar->diffInMinutes($jamKeluar);
+
+                        $jamLembur = floor($selisihMenit / 60);
+
+                        if ($jamLembur > 0) {
+                            $ketLembur = 'Lembur ' . $jamLembur . ' jam';
+                        }
+                    }
+                } catch (\Exception $e) {
+                    $ketLembur = '-';
+                }
+            }
+
+            $rekap[$index] = [
+                'tanggal' => $tanggal,
+                'absen_masuk' => $data->absen_masuk ?? '-',
+                'ket_masuk' => $data->ket_masuk ?? '-',
+                'absen_keluar' => $data->absen_keluar ?? '-',
+                'ket_keluar' => $data->ket_keluar ?? '-',
+                'status' => $data->status ?? 'tidak hadir',
+                'ket_izin' => $data->ket_izin ?? '-',
+                'ket_lembur' => $ketLembur,
+                'jam_lembur' => $jamLembur,
+                'is_libur' => $isLibur,
+                'is_sunday' => $isSunday,
+                'is_holiday' => $isLiburNasional,
+            ];
+
+            $currentDate->addDay();
+            $index++;
+        }
+
+        $pdf = Pdf::loadView('admin.pdfpegawai', compact('pegawai', 'rekap', 'bulan1'))
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->stream('reportbulanan.pdf');
     }
-
-    $pdf = Pdf::loadView('admin.pdfpegawai', compact('pegawai', 'rekap', 'bulan1'))
-        ->setPaper('a4', 'portrait');
-
-    return $pdf->stream('reportbulanan.pdf');
-}
 }

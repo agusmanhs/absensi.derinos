@@ -86,6 +86,7 @@
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
             padding: 7px 5px;
+            font-size: 9px;
         }
 
         .table2 td {
@@ -96,6 +97,7 @@
             font-weight: 400;
             padding: 5px;
             border-bottom: 1px solid #0b0b0b;
+            font-size: 9px;
         }
 
         .table2 tbody tr:nth-child(even) td {
@@ -167,13 +169,16 @@
                 <th>Ket Keluar</th>
                 <th>Status</th>
                 <th>Keterangan</th>
+                <th>Ket Lembur</th>
             </tr>
         </thead>
+        <tbody>
             @php
                 $totalHadir = 0;
                 $totalIzin = 0;
                 $totalSakit = 0;
                 $totalTidakHadir = 0;
+                $totalJamLembur = 0;
             @endphp
 
             @foreach ($rekap as $data)
@@ -189,6 +194,9 @@
                     } elseif ($data['status'] == 'tidak hadir' && !$isLibur) {
                         $totalTidakHadir++;
                     }
+                    
+                    // Hitung total jam lembur
+                    $totalJamLembur += $data['jam_lembur'];
                 @endphp
 
                 <tr class="{{ $isLibur ? 'row-libur' : '' }}">
@@ -207,19 +215,19 @@
                         @endif
                     </td>
                     <td>{{ $data['ket_izin'] }}</td>
+                    <td>{{ $data['ket_lembur'] }}</td>
                 </tr>
             @endforeach
         </tbody>
-
-        </tbody>
         <tfoot>
             <tr>
-                <td colspan="7" class="text-left">
+                <td colspan="8" class="text-left">
                     <strong>Ringkasan:</strong>
                     Hadir: {{ $totalHadir }} hari |
                     Izin: {{ $totalIzin }} hari |
                     Sakit: {{ $totalSakit }} hari |
-                    Tidak Hadir: {{ $totalTidakHadir }} hari
+                    Tidak Hadir: {{ $totalTidakHadir }} hari |
+                    Total Lembur: {{ $totalJamLembur }} jam
                 </td>
             </tr>
         </tfoot>

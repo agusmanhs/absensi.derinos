@@ -9,6 +9,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LokasiController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\UserController;
 use App\Models\Absensi;
 use Illuminate\Support\Facades\Artisan;
