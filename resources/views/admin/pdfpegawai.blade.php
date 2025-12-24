@@ -169,7 +169,6 @@
                 <th>Ket Keluar</th>
                 <th>Status</th>
                 <th>Keterangan</th>
-                <th>Ket Lembur</th>
             </tr>
         </thead>
         <tbody>
@@ -195,8 +194,12 @@
                         $totalTidakHadir++;
                     }
                     
-                    // Hitung total jam lembur
-                    $totalJamLembur += $data['jam_lembur'];
+                    if (!empty($data['ket_keluar']) && strpos($data['ket_keluar'], 'lembur') !== false) {
+                        preg_match('/lembur (\d+) jam/', $data['ket_keluar'], $matches);
+                        if (isset($matches[1])) {
+                            $totalJamLembur += (int)$matches[1];
+                        }
+                    }
                 @endphp
 
                 <tr class="{{ $isLibur ? 'row-libur' : '' }}">
@@ -215,13 +218,12 @@
                         @endif
                     </td>
                     <td>{{ $data['ket_izin'] }}</td>
-                    <td>{{ $data['ket_lembur'] }}</td>
                 </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="8" class="text-left">
+                <td colspan="7" class="text-left">
                     <strong>Ringkasan:</strong>
                     Hadir: {{ $totalHadir }} hari |
                     Izin: {{ $totalIzin }} hari |

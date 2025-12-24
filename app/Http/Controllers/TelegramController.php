@@ -19,10 +19,19 @@ class TelegramController extends Controller
         $text = $message->getText();
 
         // Membalas pesan
-        Telegram::sendMessage([
-            'chat_id' => $chatId,
-            'text' => "Anda mengirim: " . $text
-        ]);
+        if($text == 'alfi')
+        {
+            Telegram::sendMessage([
+                'chat_id' => $chatId,
+                'text' => "PacarnyaAbun "
+            ]);  
+        }else{
+
+            Telegram::sendMessage([
+                'chat_id' => $chatId,
+                'text' => "Anda mengirim: " . $text
+            ]);
+        }  
 
         return response()->json(['ok' => true]);
     }
@@ -41,5 +50,12 @@ class TelegramController extends Controller
         $response = Telegram::setWebhook(['url' => $url]);
 
         return $response;
+    }
+    public function bot()
+    {
+        Telegram::sendMessage([
+            'chat_id' => '8457022251',
+            'text' => "hi kamu pacarnya abun yaa?"
+        ]);
     }
 }

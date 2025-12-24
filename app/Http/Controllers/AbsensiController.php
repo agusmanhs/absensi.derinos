@@ -11,6 +11,7 @@ use App\Models\Pegawai;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class AbsensiController extends Controller
 {
@@ -149,81 +150,169 @@ class AbsensiController extends Controller
                         $absen->ket_masuk = 'on time';
                     }
                     $absen->save();
+                    Telegram::sendMessage([
+                        'chat_id' => '-5046766680',
+                        'text' => "Pegawai dengan username " .Auth::user()->name." telah melakukan absensi masuk"
+                    ]);
                     return redirect()->route('user.dashboard')->with('success', 'Anda berhasil absen masuk')->with('jaraknya', $jaraknya);
                 }
             }
         }
     }
 
-    public function keluar(Request $request)
-    {
-        $timezone = time() + (60 * 60 * 8);
-        $tanggal = gmdate('Y-m-d', $timezone);
-        $jam    = gmdate('H:i:s', $timezone);
-        $hari     =  gmdate('l', $timezone);
+    // public function keluar(Request $request)
+    // {
+    //     $timezone = time() + (60 * 60 * 8);
+    //     $tanggal = gmdate('Y-m-d', $timezone);
+    //     $jam    = gmdate('H:i:s', $timezone);
+    //     $hari     =  gmdate('l', $timezone);
 
-        $lokasikantor = Helper::lokasiKantor();
-        $jarakKantor = Helper::jarakKantor();
-        $lock = explode(', ', $lokasikantor);
+    //     $lokasikantor = Helper::lokasiKantor();
+    //     $jarakKantor = Helper::jarakKantor();
+    //     $lock = explode(', ', $lokasikantor);
 
-        $jabatan = Jabatan::where('id', '=', Auth::user()->pegawai->jabatan_id)->first();
-        $jam_kerja = Lokasi::where('id', '=', $jabatan->lokasi_id)->first();
+    //     $jabatan = Jabatan::where('id', '=', Auth::user()->pegawai->jabatan_id)->first();
+    //     $jam_kerja = Lokasi::where('id', '=', $jabatan->lokasi_id)->first();
 
-        $lokasikantor = ['latitude' => $lock[0],  'longitude' => $lock[1]];
-        $lokasiuser = ['latitude' => $request['latitude'],  'longitude' => $request['longitude']];
-        // dd($lokasiuser);
-        $jaraknya = Helper::howLong($lokasikantor, $lokasiuser);
+    //     $lokasikantor = ['latitude' => $lock[0],  'longitude' => $lock[1]];
+    //     $lokasiuser = ['latitude' => $request['latitude'],  'longitude' => $request['longitude']];
+    //     // dd($lokasiuser);
+    //     $jaraknya = Helper::howLong($lokasikantor, $lokasiuser);
 
-        $hadir = Absensi::where('user_id', '=', Auth::user()->id)->where('tanggal', '=', $tanggal)->first();
-        $liburAll = Libur::get();
+    //     $hadir = Absensi::where('user_id', '=', Auth::user()->id)->where('tanggal', '=', $tanggal)->first();
+    //     $liburAll = Libur::get();
 
-        $hariIni = date('Y-m-d');
-        $libur = Libur::where('tanggal', $tanggal)->exists();
+    //     $hariIni = date('Y-m-d');
+    //     $libur = Libur::where('tanggal', $tanggal)->exists();
 
-        // dd($hadir->id);
-        if ($hari == 'Sunday' or $libur) {
-            return redirect()->route('user.dashboard')->with('info', 'Hari ini libur, Tidak ada jadwal Absensi');
-        } else {
-            if ($hadir) {
-                if ($hadir->status == 'izin') {
-                    return redirect()->route('user.dashboard')->with('info', 'Hari ini anda izin');
-                } else {
-                    if ($jaraknya > $jarakKantor) {
-                        return redirect()->route('user.dashboard')->with('warning', 'Anda terlalu jauh dari lokasi kantor untuk melakukan absensi. ')->with('jaraknya', $jaraknya);
-                    } else {
-                        // dd(Auth::user()->id);
-                        // $nugu = Absensi::first();
-                        // dd($nugu->user->nama);
-                        $jamKeluarSeharusnya = Carbon::parse($tanggal . ' ' . $jam_kerja->jam_keluar);
-                        $jamKeluarAktual = Carbon::parse($tanggal . ' ' . $jam);
+    //     // dd($hadir->id);
+    //     if ($hari == 'Sunday' or $libur) {
+    //         return redirect()->route('user.dashboard')->with('info', 'Hari ini libur, Tidak ada jadwal Absensi');
+    //     } else {
+    //         if ($hadir) {
+    //             if ($hadir->status == 'izin') {
+    //                 return redirect()->route('user.dashboard')->with('info', 'Hari ini anda izin');
+    //             } else {
+    //                 if ($jaraknya > $jarakKantor) {
+    //                     return redirect()->route('user.dashboard')->with('warning', 'Anda terlalu jauh dari lokasi kantor untuk melakukan absensi. ')->with('jaraknya', $jaraknya);
+    //                 } else {
+    //                     // dd(Auth::user()->id);
+    //                     // $nugu = Absensi::first();
+    //                     // dd($nugu->user->nama);
+    //                     $jamKeluarSeharusnya = Carbon::parse($tanggal . ' ' . $jam_kerja->jam_keluar);
+    //                     $jamKeluarAktual = Carbon::parse($tanggal . ' ' . $jam);
                         
-                        $absen = Absensi::findOrFail($hadir->id);
-                        $absen->absen_keluar = $jam;
-                        $absen->lokasi_keluar = $request['lat'].', '.$request['long'];
-                        // dd($jam_kerja);
-                        if($jam < $jam_kerja->jam_keluar){
-                            $menitCepat = floor($jamKeluarAktual->diffInMinutes($jamKeluarSeharusnya));
+    //                     $absen = Absensi::findOrFail($hadir->id);
+    //                     $absen->absen_keluar = $jam;
+    //                     $absen->lokasi_keluar = $request['lat'].', '.$request['long'];
+    //                     // dd($jam_kerja);
+    //                     if($jam < $jam_kerja->jam_keluar){
+    //                         $menitCepat = floor($jamKeluarAktual->diffInMinutes($jamKeluarSeharusnya));
                             
-                            if($menitCepat >= 60){
-                                $jam_cepat = floor($menitCepat / 60);
-                                $menit_sisa = $menitCepat % 60;
-                                $absen->ket_keluar = 'pulang cepat ' . $jam_cepat . ' jam ' . $menit_sisa . ' menit';
-                            } else {
-                                $absen->ket_keluar = 'pulang cepat ' . $menitCepat . ' menit';
-                            }
-                        }
-                        else{
-                            $absen->ket_keluar = 'on time';
-                        }
-                        $absen->update();
-                        return redirect()->route('user.dashboard')->with('success', 'Anda berhasil absen keluar')->with('jaraknya', $jaraknya);
-                    }
-                }
+    //                         if($menitCepat >= 60){
+    //                             $jam_cepat = floor($menitCepat / 60);
+    //                             $menit_sisa = $menitCepat % 60;
+    //                             $absen->ket_keluar = 'pulang cepat ' . $jam_cepat . ' jam ' . $menit_sisa . ' menit';
+    //                         } else {
+    //                             $absen->ket_keluar = 'pulang cepat ' . $menitCepat . ' menit';
+    //                         }
+    //                     }
+    //                     else{
+    //                         $absen->ket_keluar = 'on time';
+    //                     }
+    //                     $absen->update();
+    //                     Telegram::sendMessage([
+    //                         'chat_id' => '-5046766680',
+    //                         'parse_mode'=> 'markdown',
+    //                         'text' => "Pegawai dengan username *" .Auth::user()->name."* telah melakukan absensi keluar"
+    //                     ]);
+    //                     return redirect()->route('user.dashboard')->with('success', 'Anda berhasil absen keluar')->with('jaraknya', $jaraknya);
+    //                 }
+    //             }
+    //         } else {
+    //             return redirect()->route('user.dashboard')->with('info', 'Anda belum absen masuk!');
+    //         };
+    //     }
+    // }
+
+    public function keluar(Request $request)
+{
+    $timezone = time() + (60 * 60 * 8);
+    $tanggal = gmdate('Y-m-d', $timezone);
+    $jam    = gmdate('H:i:s', $timezone);
+    $hari     =  gmdate('l', $timezone);
+
+    $lokasikantor = Helper::lokasiKantor();
+    $jarakKantor = Helper::jarakKantor();
+    $lock = explode(', ', $lokasikantor);
+
+    $jabatan = Jabatan::where('id', '=', Auth::user()->pegawai->jabatan_id)->first();
+    $jam_kerja = Lokasi::where('id', '=', $jabatan->lokasi_id)->first();
+
+    $lokasikantor = ['latitude' => $lock[0],  'longitude' => $lock[1]];
+    $lokasiuser = ['latitude' => $request['latitude'],  'longitude' => $request['longitude']];
+    $jaraknya = Helper::howLong($lokasikantor, $lokasiuser);
+
+    $hadir = Absensi::where('user_id', '=', Auth::user()->id)->where('tanggal', '=', $tanggal)->first();
+    $liburAll = Libur::get();
+
+    $hariIni = date('Y-m-d');
+    $libur = Libur::where('tanggal', $tanggal)->exists();
+
+    if ($hari == 'Sunday' or $libur) {
+        return redirect()->route('user.dashboard')->with('info', 'Hari ini libur, Tidak ada jadwal Absensi');
+    } else {
+        if ($hadir) {
+            if ($hadir->status == 'izin') {
+                return redirect()->route('user.dashboard')->with('info', 'Hari ini anda izin');
             } else {
-                return redirect()->route('user.dashboard')->with('info', 'Anda belum absen masuk!');
-            };
-        }
+                if ($jaraknya > $jarakKantor) {
+                    return redirect()->route('user.dashboard')->with('warning', 'Anda terlalu jauh dari lokasi kantor untuk melakukan absensi. ')->with('jaraknya', $jaraknya);
+                } else {
+                    $jamKeluarSeharusnya = Carbon::parse($tanggal . ' ' . $jam_kerja->jam_keluar);
+                    $jamKeluarAktual = Carbon::parse($tanggal . ' ' . $jam);
+                    
+                    $batasOnTime = $jamKeluarSeharusnya->copy()->addHour();
+                    
+                    $absen = Absensi::findOrFail($hadir->id);
+                    $absen->absen_keluar = $jam;
+                    $absen->lokasi_keluar = $request['lat'].', '.$request['long'];
+                    
+                    if($jam < $jam_kerja->jam_keluar){
+                        $menitCepat = floor($jamKeluarAktual->diffInMinutes($jamKeluarSeharusnya));
+                        
+                        if($menitCepat >= 60){
+                            $jam_cepat = floor($menitCepat / 60);
+                            $menit_sisa = $menitCepat % 60;
+                            $absen->ket_keluar = 'pulang cepat ' . $jam_cepat . ' jam ' . $menit_sisa . ' menit';
+                        } else {
+                            $absen->ket_keluar = 'pulang cepat ' . $menitCepat . ' menit';
+                        }
+                    }
+                    else if($jamKeluarAktual->lte($batasOnTime)){
+                        $absen->ket_keluar = 'on time';
+                    }
+                    else {
+                        $menitLembur = floor($jamKeluarAktual->diffInMinutes($jamKeluarSeharusnya));
+                        $jamLembur = floor($menitLembur / 60);
+                        
+                        $absen->ket_keluar = 'lembur ' . $jamLembur . ' jam';
+                    }
+                    
+                    $absen->update();
+                    Telegram::sendMessage([
+                        'chat_id' => '-5046766680',
+                        'parse_mode'=> 'markdown',
+                        'text' => "Pegawai dengan username *" .Auth::user()->name."* telah melakukan absensi keluar"
+                    ]);
+                    return redirect()->route('user.dashboard')->with('success', 'Anda berhasil absen keluar')->with('jaraknya', $jaraknya);
+                }
+            }
+        } else {
+            return redirect()->route('user.dashboard')->with('info', 'Anda belum absen masuk!');
+        };
     }
+}
 
     public function izin(Request $request)
     {
