@@ -194,11 +194,9 @@
                         $totalTidakHadir++;
                     }
                     
-                    if (!empty($data['ket_keluar']) && strpos($data['ket_keluar'], 'lembur') !== false) {
-                        preg_match('/lembur (\d+) jam/', $data['ket_keluar'], $matches);
-                        if (isset($matches[1])) {
-                            $totalJamLembur += (int)$matches[1];
-                        }
+                    // Hitung total jam lembur dari ket_lembur (bukan ket_keluar)
+                    if (!empty($data['ket_lembur']) && $data['ket_lembur'] !== '-') {
+                        $totalJamLembur += (int)$data['jam_lembur'];
                     }
                 @endphp
 
