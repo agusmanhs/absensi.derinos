@@ -13,7 +13,7 @@ class LiburController extends Controller
     public function index()
     {
         $liburs = Libur::orderBy('tanggal')->get();
-        return view('admin.libur', compact('liburs'));
+        return view('admin.libur', compact('liburs'));  
     }
 
     /**

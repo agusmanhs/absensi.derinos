@@ -145,11 +145,36 @@ class AbsensiController extends Controller
                     } else {
                         $absen->ket_masuk = 'on time';
                     }
+
                     $absen->save();
+
+                    // $messege = [
+                    //     'chat_id' => '-5046766680',
+                    //     'parse_mode' => 'markdown',
+                    //     'text' => "🟢 *ABSENSI MASUK*\n" .
+                    //         "━━━━━━━━━━━━━━━━━━━━\n" .
+                    //         "*Pegawai: *" . Auth::user()->pegawai->nama . "\n" .
+                    //         "*Tanggal: *" . date('d-m-Y') . "\n" .
+                    //         "*Waktu: *" . date('H:i:s') . "\n" .
+                    //         "*Status: *SUDAH MELAKUKAN ABSENSI MASUK`\n" .
+                    //         "━━━━━━━━━━━━━━━━━━━━"
+                    // ];
+
+                    // dd($messege);
+
+
                     Telegram::sendMessage([
                         'chat_id' => '-5046766680',
-                        'text' => "Pegawai dengan username " . Auth::user()->pegawai->name . " telah melakukan absensi masuk"
+                        'parse_mode' => 'markdown',
+                        'text' => "🟢 *ABSENSI MASUK*\n" .
+                                  "━━━━━━━━━━━━━━━━━━━━\n" .
+                                  "*Nama : *" . Auth::user()->pegawai->nama . "\n" .
+                                  "*Tanggal : *" . gmdate('d-m-Y', $timezone) . "\n" .
+                                  "*Waktu : *" . $jam . "\n" .
+                                  "*Status : *SUDAH MELAKUKAN ABSENSI MASUK\n".
+                                  "━━━━━━━━━━━━━━━━━━━━"
                     ]);
+
                     return redirect()->route('user.dashboard')->with('success', 'Anda berhasil absen masuk')->with('jaraknya', $jaraknya);
                 }
             }
@@ -210,11 +235,9 @@ class AbsensiController extends Controller
                             } else {
                                 $absen->ket_keluar = 'pulang cepat ' . $menitCepat . ' menit';
                             }
-                        }
-                        else if ($jamKeluarAktual->between($jamKeluarSeharusnya, $batasOnTime)) {
+                        } else if ($jamKeluarAktual->between($jamKeluarSeharusnya, $batasOnTime)) {
                             $absen->ket_keluar = 'ontime';
-                        }
-                        else {
+                        } else {
                             $menitLembur = floor($batasOnTime->diffInMinutes($jamKeluarAktual));
                             $jamLembur = floor($menitLembur / 60);
 
@@ -230,7 +253,13 @@ class AbsensiController extends Controller
                         Telegram::sendMessage([
                             'chat_id' => '-5046766680',
                             'parse_mode' => 'markdown',
-                            'text' => "Pegawai dengan username *" . Auth::user()->pegawai->nama . "* telah melakukan absensi keluar"
+                            'text' => "🔴 *ABSENSI KELUAR*\n" .
+                                "━━━━━━━━━━━━━━━━━━━━\n" .
+                                "*Nama : *" . Auth::user()->pegawai->nama . "\n" .
+                                "*Tanggal : *" . gmdate('d-m-Y', $timezone) . "\n" .
+                                "*Waktu : *" . $jam . "\n" .
+                                "*Status : *SUDAH MELAKUKAN ABSENSI KELUAR\n" .
+                                "━━━━━━━━━━━━━━━━━━━━"
                         ]);
 
                         return redirect()->route('user.dashboard')->with('success', 'Anda berhasil absen keluar')->with('jaraknya', $jaraknya);
@@ -268,6 +297,19 @@ class AbsensiController extends Controller
             $izin->status     = 'pending';
             $izin->save();
         }
+
+        Telegram::sendMessage([
+            'chat_id' => '-5046766680',
+            'parse_mode' => 'markdown',
+            'text' => "📋 *PENGAJUAN IZIN BARU*\n" .
+                "━━━━━━━━━━━━━━━━━━━━\n" .
+                "*Nama : *" . Auth::user()->pegawai->nama . "\n" .
+                "*Tanggal : *" . date('d-m-Y', strtotime($request->input('tanggal'))) . "\n" .
+                "*Keterangan : *" . $request->input('ket_izin') . "\n" .
+                "*Status : * `BELUM DITERIMA / DITOLAK`\n" .
+                "━━━━━━━━━━━━━━━━━━━━"
+        ]);
+
 
         return redirect()->route('user.dashboard')->with('success', 'Pengajuan izin berhasil dikirim!');
     }

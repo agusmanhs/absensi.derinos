@@ -299,25 +299,25 @@
                                                 <td>{{ $y->tanggal }}</td>
                                                 <td class="text-center">
                                                     @if ($y->ket_masuk=='terlambat')
-                                                        <span class="badge bg-danger rounded-0 text-white"">{{ $y->absen_masuk }}</span>
+                                                        <span class="badge bg-danger rounded-0 text-white">{{ $y->absen_masuk }}</span>
                                                     @else  
-                                                        <span class="badge bg-success rounded-0 text-white"">{{ $y->absen_masuk }}</span>
+                                                        <span class="badge bg-success rounded-0 text-white">{{ $y->absen_masuk }}</span>
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($y->ket_keluar == 'cepat pulang')
-                                                        <span class="badge bg-danger rounded-0 text-white"">{{ $y->absen_keluar }}</span>
+                                                        <span class="badge bg-danger rounded-0 text-white">{{ $y->absen_keluar }}</span>
                                                     @else
-                                                        <span class="badge bg-success rounded-0 text-white"">{{ $y->absen_keluar }}</span>
+                                                        <span class="badge bg-success rounded-0 text-white">{{ $y->absen_keluar }}</span>
                                                     @endif
                                                 </td>
                                                 <td class="text-center">  
                                                     @if ($y->status == 'pending')
-                                                        <span class="badge bg-warning rounded-0 text-white"">{{ $y->status }}</span>
+                                                        <span class="badge bg-warning rounded-0 text-white">{{ $y->status }}</span>
                                                     @elseif ($y->status == 'izin')
-                                                        <span class="badge bg-info rounded-0 text-white"">{{ $y->status }}</span>
+                                                        <span class="badge bg-info rounded-0 text-white">{{ $y->status }}</span>
                                                     @else
-                                                        <span class="badge bg-success rounded-0 text-white"">{{ $y->status }}</span>
+                                                        <span class="badge bg-success rounded-0 text-white">{{ $y->status }}</span>
                                                     @endif
                                                 </td>
                                                 <td>{{ $y->ket_izin }}</td>
