@@ -113,15 +113,56 @@
             text-align: left !important;
         }
 
-        tfoot {
-            background-color: #e9ecef;
-            font-weight: bold;
+        .ringkasan-container {
+            background-color: #0a399e;
+            padding: 15px;
+            margin-top: 15px;
         }
 
-        tfoot td {
+        .ringkasan-container td {
             background-color: #0a399e !important;
             color: #ffffff !important;
-            padding: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .ringkasan-title {
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .ringkasan-content {
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 10px;
+            line-height: 1.8;
+        }
+
+        strong {
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 10px;
+            line-height: 1.8;
+        }
+
+        .ringkasan-item {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .ringkasan-label {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .footer {
@@ -219,19 +260,22 @@
                 </tr>
             @endforeach
         </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="7" class="text-left">
-                    <strong>Ringkasan:</strong>
-                    Hadir: {{ $totalHadir }} hari |
-                    Izin: {{ $totalIzin }} hari |
-                    Sakit: {{ $totalSakit }} hari |
-                    Tidak Hadir: {{ $totalTidakHadir }} hari |
-                    Total Lembur: {{ $totalJamLembur }} jam
-                </td>
-            </tr>
-        </tfoot>
     </table>
+
+    <!-- Ringkasan -->
+    <table class="ringkasan-container" width="100%">
+        <tr>
+            <td>
+                <strong>Rekapitulasi:</strong>
+                Hadir: {{ $totalHadir }} hari |
+                Izin: {{ $totalIzin }} hari |
+                Sakit: {{ $totalSakit }} hari |
+                Tidak Hadir: {{ $totalTidakHadir }} hari |
+                Total Lembur: {{ $totalJamLembur }} jam
+            </td>
+        </tr>
+    </table>
+
 </body>
 
 </html>
