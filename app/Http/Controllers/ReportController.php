@@ -116,13 +116,75 @@ class ReportController extends Controller
     //     return $pdf->stream('reportbulanan.pdf');
     // }
 
+    // public function pdfbulanan(Request $request)
+    // {
+    //     $bulan = $request->bulan ? date('m', strtotime($request->bulan)) : date('m');
+    //     $tahun = $request->bulan ? date('Y', strtotime($request->bulan)) : date('Y');
+
+    //     $tanggalMulai = \Carbon\Carbon::createFromDate($tahun, $bulan, 25);
+    //     $tanggalSelesai = \Carbon\Carbon::createFromDate($tahun, $bulan, 25)->addMonth()->subDay();
+
+    //     $bulan1 = $tanggalMulai->translatedFormat('d F Y') . ' - ' . $tanggalSelesai->translatedFormat('d F Y');
+
+    //     $liburNasional = \App\Models\Libur::whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
+    //         ->pluck('tanggal')
+    //         ->toArray();
+
+    //     $dates = [];
+    //     $currentDate = $tanggalMulai->copy();
+
+    //     while ($currentDate <= $tanggalSelesai) {
+    //         $isHoliday = in_array($currentDate->format('Y-m-d'), $liburNasional);
+
+    //         $dates[] = [
+    //             'day' => $currentDate->day,
+    //             'month' => $currentDate->month,
+    //             'year' => $currentDate->year,
+    //             'full_date' => $currentDate->format('Y-m-d'),
+    //             'is_sunday' => $currentDate->isSunday(),
+    //             'is_holiday' => $isHoliday,
+    //             'is_libur' => $currentDate->isSunday() || $isHoliday
+    //         ];
+
+    //         $currentDate->addDay();
+    //     }
+
+    //     $pegawai = User::orderBy('name')->get();
+
+    //     $absen = DB::table('absensis')
+    //         ->whereBetween('tanggal', [$tanggalMulai->format('Y-m-d'), $tanggalSelesai->format('Y-m-d')])
+    //         ->get();
+
+    //     $rekap = [];
+    //     foreach ($pegawai as $p) {
+    //         foreach ($dates as $date) {
+    //             $rekap[$p->id][$date['full_date']] = '-';
+    //         }
+    //     }
+
+    //     foreach ($absen as $a) {
+    //         $rekap[$a->user_id][$a->tanggal] = $a->status;
+    //     }
+
+    //     $pdf = Pdf::loadView('admin.pdfbulanan', compact('pegawai', 'dates', 'rekap', 'bulan1'))
+    //         ->setPaper('a4', 'landscape');
+
+    //     return $pdf->stream('reportbulanan.pdf');
+    // }
+
     public function pdfbulanan(Request $request)
     {
         $bulan = $request->bulan ? date('m', strtotime($request->bulan)) : date('m');
         $tahun = $request->bulan ? date('Y', strtotime($request->bulan)) : date('Y');
 
+        $today = \Carbon\Carbon::today();
         $tanggalMulai = \Carbon\Carbon::createFromDate($tahun, $bulan, 25);
-        $tanggalSelesai = \Carbon\Carbon::createFromDate($tahun, $bulan, 25)->addMonth()->subDay();
+
+        if ($tahun == $today->year && $bulan == $today->month && $today->day < 25) {
+            $tanggalMulai->subMonth();
+        }
+
+        $tanggalSelesai = $tanggalMulai->copy()->addMonth()->subDay();
 
         $bulan1 = $tanggalMulai->translatedFormat('d F Y') . ' - ' . $tanggalSelesai->translatedFormat('d F Y');
 
@@ -179,8 +241,14 @@ class ReportController extends Controller
         $tahun = $request->bulan ? date('Y', strtotime($request->bulan)) : date('Y');
         $pegawaiId = $request->pegawai_id;
 
+        $today = \Carbon\Carbon::today();
         $tanggalMulai = \Carbon\Carbon::createFromDate($tahun, $bulan, 25);
-        $tanggalSelesai = \Carbon\Carbon::createFromDate($tahun, $bulan, 25)->addMonth()->subDay();
+
+        if ($tahun == $today->year && $bulan == $today->month && $today->day < 25) {
+            $tanggalMulai->subMonth();
+        }
+
+        $tanggalSelesai = $tanggalMulai->copy()->addMonth()->subDay();
 
         $bulan1 = $tanggalMulai->translatedFormat('d F Y') . ' - ' . $tanggalSelesai->translatedFormat('d F Y');
 
@@ -285,12 +353,6 @@ class ReportController extends Controller
                 $ketKeluarBaru = $data ? ($data->ket_keluar ?? '-') : '-';
             }
 
-            // dd([
-            //     'user_id' => $pegawaiId,
-            //     'data_pegawai' => $dataPegawai,
-            //     'jam_keluar_lokasi' => $jamKeluarLokasi
-            // ]);
-
             $rekap[$index] = [
                 'tanggal' => $tanggal,
                 'absen_masuk' => $data ? ($data->absen_masuk ?? '-') : '-',
@@ -313,6 +375,6 @@ class ReportController extends Controller
         $pdf = Pdf::loadView('admin.pdfpegawai', compact('pegawai', 'rekap', 'bulan1'))
             ->setPaper('a4', 'portrait');
 
-        return $pdf->stream('reportbulanan.pdf');
+        return $pdf->stream('reportpegawai.pdf');
     }
 }

@@ -1,6 +1,6 @@
 @extends('admin._layout')
 @section('content')
-       <div class="page-wrapper">
+    <div class="page-wrapper">
         <!-- ============================================================== -->
         <!-- Bread crumb and right sidebar toggle -->
         <!-- ============================================================== -->
@@ -105,15 +105,15 @@
             <!-- Recent comment and chats -->
             <div class="row">
                 <div class="col-lg-12">
-                        <!-- Card -->
-                        <div class="card">
-                            <div class="card-body">
-                                @if (session('error'))
-                                    <div class="alert alert-danger">
-                                        {{ session('error') }}
-                                    </div>
-                                @endif
-                                {{-- <div class="d-flex justify-content-end align-items-center mb-3">
+                    <!-- Card -->
+                    <div class="card">
+                        <div class="card-body">
+                            @if (session('error'))
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
+                            {{-- <div class="d-flex justify-content-end align-items-center mb-3">
 
                                     <form action="{{ route('admin.report.bulanan') }}" method="GET" class="d-flex align-items-center gap-2">
                                         <input type="month" name="bulan" 
@@ -132,7 +132,7 @@
                                     </div>
                                 
                                 </div> --}}
-                                <div class="d-flex justify-content-end align-items-center mb-3 gap-3">
+                            {{-- <div class="d-flex justify-content-end align-items-center mb-3 gap-3">
 
                                     <form action="{{ route('admin.report.bulanan') }}" method="GET" 
                                           class="d-flex align-items-center gap-2">
@@ -151,52 +151,73 @@
                                     </a>
                                 
                                 </div>
-                                
-                                
-                                
-                                <div class="table-responsive">
-                                    <table id="zero_config1" class="table table-striped table-bordered">
-                                        <thead>
+                                 --}}
+
+                            <div class="d-flex justify-content-end align-items-center mb-3 gap-3">
+
+                                <form action="{{ route('admin.report.bulanan') }}" method="GET"
+                                    class="d-flex align-items-center gap-2">
+
+                                    <input type="month" name="bulan"  class="form-control form-control-sm"
+                                        value="{{ request('bulan', now()->format('Y-m')) }}"
+                                        max="{{ now()->format('Y-m') }}">
+
+                                    <button type="submit" class="btn btn-info btn-sm mr-2">Filter</button>
+                                </form>
+
+                                <a href="{{ route('admin.pdf.bulanan', ['bulan' => request('bulan')]) }}" target="_blank"
+                                    class="btn btn-secondary btn-sm">
+                                    <i class="fas fa-print"></i> Cetak PDF
+                                </a>
+
+                            </div>
+
+
+
+                            <div class="table-responsive">
+                                <table id="zero_config1" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Tanggal</th>
+                                            <th>Nama</th>
+                                            <th>Absen Masuk</th>
+                                            <th>Absen Keluar</th>
+                                            <th>Status</th>
+                                            <th>Keterangan</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($riwayat as $a)
                                             <tr>
-                                                <th>Tanggal</th>
-                                                <th>Nama</th>
-                                                <th>Absen Masuk</th>
-                                                <th>Absen Keluar</th>
-                                                <th>Status</th>
-                                                <th>Keterangan</th>
-                                                <th>Action</th>
+                                                <td>{{ $a->tanggal }}</td>
+                                                <td>{{ $a->name }}</td>
+                                                <td class="text-center">
+                                                    <span
+                                                        class="badge bg-success rounded-0 text-white">{{ $a->absen_masuk }}</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span
+                                                        class="badge bg-success rounded-0 text-white">{{ $a->absen_keluar }}</span>
+                                                </td>
+                                                <td>{{ $a->status }}</td>
+                                                <td>{{ $a->ket_izin }}</td>
+                                                <td class="text-center">
+                                                    <a href="{{ route('admin.pdf.pegawai', [
+                                                        'pegawai_id' => $a->user_id,
+                                                        'bulan' => request('bulan'),
+                                                    ]) }}"
+                                                        target="_blank" class="btn btn-secondary btn-sm">
+                                                        <i class="fa fa-print"></i>
+                                                    </a>
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($riwayat as $a) 
-                                                <tr>
-                                                    <td>{{ $a->tanggal }}</td>
-                                                    <td>{{ $a->name }}</td>
-                                                    <td class="text-center">
-                                                        <span class="badge bg-success rounded-0 text-white">{{ $a->absen_masuk }}</span>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <span class="badge bg-success rounded-0 text-white">{{ $a->absen_keluar }}</span>
-                                                    </td>
-                                                    <td>{{ $a->status }}</td>
-                                                    <td>{{ $a->ket_izin }}</td>
-                                                    <td class="text-center">
-                                                        <a href="{{ route('admin.pdf.pegawai', [
-                                                                'pegawai_id' => $a->user_id,
-                                                                'bulan' => request('bulan')
-                                                            ]) }}"
-                                                           target="_blank"
-                                                           class="btn btn-secondary btn-sm">
-                                                           <i class="fa fa-print"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
 

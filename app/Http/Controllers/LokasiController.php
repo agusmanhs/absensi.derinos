@@ -39,6 +39,8 @@ class LokasiController extends Controller
         ]);
 
         if($request->jam_masuk < $request->jam_keluar){
+
+            // $validated['batas_jarak'] = $request->batas_jarak + config('absensi.buffer_jarak', 20);
                 Lokasi::create($validated);
             return redirect()->route('admin.lokasi')->with('success', 'Pengaturan Absensi berhasil disimpan!');
         }else{
@@ -81,6 +83,8 @@ class LokasiController extends Controller
         ]);
 
         if ($request->jam_masuk < $request->jam_keluar) {
+
+            // $validated['batas_jarak'] = $request->batas_jarak + config('absensi.buffer_jarak', 20);
 
             $lokasi->update($validated);
 

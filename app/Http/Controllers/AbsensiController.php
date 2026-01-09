@@ -97,6 +97,9 @@ class AbsensiController extends Controller
 
         $jaraknya = Helper::howLong($lokasikantor, $lokasiuser);
 
+        $batasJarakDenganBuffer = $jarakKantor + config('absensi.buffer_jarak', 20);
+
+
         $hadir = Absensi::where('user_id', '=', Auth::user()->id)->where('tanggal', '=', $tanggal)->first();
         $liburAll = Libur::get();
 
@@ -114,7 +117,7 @@ class AbsensiController extends Controller
                     return redirect()->route('user.dashboard')->with('warning', 'Anda sudah absen masuk!');
                 }
             } else {
-                if ($jaraknya > $jarakKantor) {
+                if ($jaraknya > $batasJarakDenganBuffer) {
                     return redirect()->route('user.dashboard')->with('warning', 'Anda terlalu jauh dari lokasi kantor untuk melakukan absensi. ')->with('jaraknya', $jaraknya);
                 } else {
                     $absen = new Absensi();
@@ -184,8 +187,8 @@ class AbsensiController extends Controller
 
     public function keluar(Request $request)
     {
-        $timezone = time() + (60 * 60 * 8);
-        $tanggal = gmdate('Y-m-d', $timezone);
+        $timezone = time() + (60 * 60 * 8);  
+        $tanggal = gmdate('Y-m-d', $timezone);  
         $jam = gmdate('H:i:s', $timezone);
         $hari = gmdate('l', $timezone);
 
@@ -200,6 +203,16 @@ class AbsensiController extends Controller
         $lokasiuser = ['latitude' => $request['latitude'], 'longitude' => $request['longitude']];
         $jaraknya = Helper::howLong($lokasikantor, $lokasiuser);
 
+        $batasJarakDenganBuffer = $jarakKantor + config('absensi.buffer_jarak', 20);
+
+        // dd([
+        //     'Jarak Kantor' => $jarakKantor,
+        //     'Buffer' => config('absensi.buffer_jarak', 20),
+        //     'Batas Jarak + Buffer' => $batasJarakDenganBuffer,
+        //     'Jarak User Saat Ini' => $jaraknya,
+        //     'Status' => $jaraknya > $batasJarakDenganBuffer ? 'DITOLAK' : 'BOLEH ABSEN'
+        // ]);
+
         $hadir = Absensi::where('user_id', '=', Auth::user()->id)->where('tanggal', '=', $tanggal)->first();
         $liburAll = Libur::get();
 
@@ -213,7 +226,7 @@ class AbsensiController extends Controller
                 if ($hadir->status == 'izin') {
                     return redirect()->route('user.dashboard')->with('info', 'Hari ini anda izin');
                 } else {
-                    if ($jaraknya > $jarakKantor) {
+                    if ($jaraknya > $batasJarakDenganBuffer) {
                         return redirect()->route('user.dashboard')->with('warning', 'Anda terlalu jauh dari lokasi kantor untuk melakukan absensi. ')->with('jaraknya', $jaraknya);
                     } else {
                         $jamKeluarSeharusnya = Carbon::parse($tanggal . ' ' . $jam_kerja->jam_keluar);
