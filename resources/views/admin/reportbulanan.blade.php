@@ -155,12 +155,55 @@
 
                             <div class="d-flex justify-content-end align-items-center mb-3 gap-3">
 
-                                <form action="{{ route('admin.report.bulanan') }}" method="GET"
+                                {{-- <form action="{{ route('admin.report.bulanan') }}" method="GET"
                                     class="d-flex align-items-center gap-2">
 
                                     <input type="month" name="bulan"  class="form-control form-control-sm"
                                         value="{{ request('bulan', now()->format('Y-m')) }}"
                                         max="{{ now()->format('Y-m') }}">
+
+                                    <button type="submit" class="btn btn-info btn-sm mr-2">Filter</button>
+                                </form> --}}
+
+                                <form action="{{ route('admin.report.bulanan') }}" method="GET"
+                                    class="d-flex align-items-center gap-2">
+
+                                    <select name="bulan" class="form-control form-control-sm mr-2" style="width: auto;">
+                                        @php
+                                            $bulanSekarang = request('bulan', now()->format('m'));
+                                        @endphp
+                                        <option value="01" {{ $bulanSekarang == '01' ? 'selected' : '' }}>Januari
+                                        </option>
+                                        <option value="02" {{ $bulanSekarang == '02' ? 'selected' : '' }}>Februari
+                                        </option>
+                                        <option value="03" {{ $bulanSekarang == '03' ? 'selected' : '' }}>Maret</option>
+                                        <option value="04" {{ $bulanSekarang == '04' ? 'selected' : '' }}>April</option>
+                                        <option value="05" {{ $bulanSekarang == '05' ? 'selected' : '' }}>Mei</option>
+                                        <option value="06" {{ $bulanSekarang == '06' ? 'selected' : '' }}>Juni</option>
+                                        <option value="07" {{ $bulanSekarang == '07' ? 'selected' : '' }}>Juli</option>
+                                        <option value="08" {{ $bulanSekarang == '08' ? 'selected' : '' }}>Agustus
+                                        </option>
+                                        <option value="09" {{ $bulanSekarang == '09' ? 'selected' : '' }}>September
+                                        </option>
+                                        <option value="10" {{ $bulanSekarang == '10' ? 'selected' : '' }}>Oktober
+                                        </option>
+                                        <option value="11" {{ $bulanSekarang == '11' ? 'selected' : '' }}>November
+                                        </option>
+                                        <option value="12" {{ $bulanSekarang == '12' ? 'selected' : '' }}>Desember
+                                        </option>
+                                    </select>
+
+                                    <select name="tahun" class="form-control form-control-sm mr-2" style="width: auto;">
+                                        @php
+                                            $tahunSekarang = request('tahun', now()->format('Y'));
+                                            $tahunMulai = 2020; 
+                                            $tahunAkhir = now()->format('Y');
+                                        @endphp
+                                        @for ($i = $tahunAkhir; $i >= $tahunMulai; $i--)
+                                            <option value="{{ $i }}"
+                                                {{ $tahunSekarang == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                        @endfor
+                                    </select>
 
                                     <button type="submit" class="btn btn-info btn-sm mr-2">Filter</button>
                                 </form>

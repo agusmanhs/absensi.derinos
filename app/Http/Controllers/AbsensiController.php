@@ -130,14 +130,14 @@ class AbsensiController extends Controller
                     if ($jam > $jam_kerja->jam_masuk) {
                         $jamMasukSeharusnya = Carbon::parse($jam_kerja->jam_masuk);
                         $jamMasukAktual = Carbon::parse($jam);
-                        $menitTerlambat = $jamMasukSeharusnya->diffInMinutes($jamMasukAktual);
+                        $menitTerlambat = (int) $jamMasukSeharusnya->diffInMinutes($jamMasukAktual);
 
 
 
                         if ($menitTerlambat >= 60) {
                             $jam_terlambat = floor($menitTerlambat / 60);
                             $menit_sisa = $menitTerlambat % 60;
-                            if ($menit_sisa > 1) {
+                            if ($menit_sisa > 0) {
                                 $absen->ket_masuk = 'terlambat ' . $jam_terlambat . ' jam ' . $menit_sisa . ' menit';
                             } else {
                                 $absen->ket_masuk = 'terlambat ' . $jam_terlambat . ' jam';

@@ -26,11 +26,12 @@ class ReportController extends Controller
 
     public function reportbulanan(Request $request)
     {
-        $bulan = $request->bulan ? date('m', strtotime($request->bulan)) : date('m');
-        $tahun = $request->bulan ? date('Y', strtotime($request->bulan)) : date('Y');
+        $bulan = $request->input('bulan', date('m'));
+        $tahun = $request->input('tahun', date('Y'));
 
         $bulan1 = \Carbon\Carbon::createFromDate($tahun, $bulan, 1)
             ->translatedFormat('F Y');
+
 
         $riwayat = DB::table('absensis')
             ->join('users', 'absensis.user_id', '=', 'users.id')
@@ -174,8 +175,11 @@ class ReportController extends Controller
 
     public function pdfbulanan(Request $request)
     {
-        $bulan = $request->bulan ? date('m', strtotime($request->bulan)) : date('m');
-        $tahun = $request->bulan ? date('Y', strtotime($request->bulan)) : date('Y');
+        // $bulan = $request->bulan ? date('m', strtotime($request->bulan)) : date('m');
+        // $tahun = $request->bulan ? date('Y', strtotime($request->bulan)) : date('Y');
+
+        $bulan = $request->input('bulan', date('m'));
+        $tahun = $request->input('tahun', date('Y'));
 
         $today = \Carbon\Carbon::today();
         $tanggalMulai = \Carbon\Carbon::createFromDate($tahun, $bulan, 25);
