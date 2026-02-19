@@ -196,7 +196,7 @@
                                     <select name="tahun" class="form-control form-control-sm mr-2" style="width: auto;">
                                         @php
                                             $tahunSekarang = request('tahun', now()->format('Y'));
-                                            $tahunMulai = 2020; 
+                                            $tahunMulai = 2020;
                                             $tahunAkhir = now()->format('Y');
                                         @endphp
                                         @for ($i = $tahunAkhir; $i >= $tahunMulai; $i--)
@@ -208,8 +208,8 @@
                                     <button type="submit" class="btn btn-info btn-sm mr-2">Filter</button>
                                 </form>
 
-                                <a href="{{ route('admin.pdf.bulanan', ['bulan' => request('bulan')]) }}" target="_blank"
-                                    class="btn btn-secondary btn-sm">
+                                <a href="{{ route('admin.pdf.bulanan', ['bulan' => request('bulan'), 'tahun' => request('tahun')]) }}"
+                                    target="_blank" class="btn btn-secondary btn-sm">
                                     <i class="fas fa-print"></i> Cetak PDF
                                 </a>
 
@@ -249,6 +249,7 @@
                                                     <a href="{{ route('admin.pdf.pegawai', [
                                                         'pegawai_id' => $a->user_id,
                                                         'bulan' => request('bulan'),
+                                                        'tahun' => request('tahun'),
                                                     ]) }}"
                                                         target="_blank" class="btn btn-secondary btn-sm">
                                                         <i class="fa fa-print"></i>
