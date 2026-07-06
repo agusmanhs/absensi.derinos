@@ -246,11 +246,13 @@
                                     <table id="zero_config" class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Nama</th>
-                                                <th>Absen Masuk</th>
-                                                <th>Absen Keluar</th>
-                                                <th>Status</th>
-                                                <th>Keterangan</th>
+                                                    <th>Nama</th>
+                                                    <th>Absen Masuk</th>
+                                                    <th>Foto Masuk</th>
+                                                    <th>Absen Keluar</th>
+                                                    <th>Foto Keluar</th>
+                                                    <th>Status</th>
+                                                    <th>Keterangan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -266,10 +268,28 @@
                                                             @endif
                                                         </td>
                                                         <td class="text-center">
+                                                            @if ($y->foto_masuk)
+                                                                <img src="{{ asset('image/'.$y->foto_masuk) }}" 
+                                                                    style="width:50px; height:50px; object-fit:cover; border-radius:6px; cursor:pointer;"
+                                                                    onclick="lihatFotoBesar('{{ asset('image/'.$y->foto_masuk) }}')">
+                                                            @else
+                                                                <span class="text-muted">-</span>
+                                                            @endif
+                                                        </td>
+                                                        <td class="text-center">
                                                             @if ($y->absen_keluar)
                                                                 <span class="badge bg-success rounded-0 text-white"">{{ $y->absen_keluar }}</span>
                                                             @else
                                                                 <span class="badge bg-warning rounded-0 text-white"">Belum Absen</span>
+                                                            @endif
+                                                        </td>
+                                                        <td class="text-center">
+                                                            @if ($y->foto_keluar)
+                                                                <img src="{{ asset('image/'.$y->foto_keluar) }}" 
+                                                                    style="width:50px; height:50px; object-fit:cover; border-radius:6px; cursor:pointer;"
+                                                                    onclick="lihatFotoBesar('{{ asset('image/'.$y->foto_keluar) }}')">
+                                                            @else
+                                                                <span class="text-muted">-</span>
                                                             @endif
                                                         </td>
                                                         <td class="text-center">
@@ -360,12 +380,14 @@
                                     <table id="zero_config1" class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Tanggal</th>
-                                                <th>Nama</th>
-                                                <th>Absen Masuk</th>
-                                                <th>Absen Keluar</th>
-                                                <th>Status</th>
-                                                <th>Keterangan</th>
+                                                    <th>Tanggal</th>
+                                                    <th>Nama</th>
+                                                    <th>Absen Masuk</th>
+                                                    <th>Foto Masuk</th>
+                                                    <th>Absen Keluar</th>
+                                                    <th>Foto Keluar</th>
+                                                    <th>Status</th>
+                                                    <th>Keterangan</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -377,7 +399,25 @@
                                                         <span class="badge bg-success rounded-0 text-white">{{ $a->absen_masuk }}</span>
                                                     </td>
                                                     <td class="text-center">
+                                                        @if ($a->foto_masuk)
+                                                            <img src="{{ asset('image/'.$a->foto_masuk) }}" 
+                                                                style="width:50px; height:50px; object-fit:cover; border-radius:6px; cursor:pointer;"
+                                                                onclick="lihatFotoBesar('{{ asset('image/'.$a->foto_masuk) }}')">
+                                                        @else
+                                                            <span class="text-muted">-</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center">
                                                         <span class="badge bg-success rounded-0 text-white">{{ $a->absen_keluar }}</span>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if ($a->foto_keluar)
+                                                            <img src="{{ asset('image/'.$a->foto_keluar) }}" 
+                                                                style="width:50px; height:50px; object-fit:cover; border-radius:6px; cursor:pointer;"
+                                                                onclick="lihatFotoBesar('{{ asset('image/'.$a->foto_keluar) }}')">
+                                                        @else
+                                                            <span class="text-muted">-</span>
+                                                        @endif
                                                     </td>
                                                     <td>{{ $a->status }}</td>
                                                     <td>{{ $a->ket_izin }}</td>
