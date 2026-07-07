@@ -1,5 +1,100 @@
 @extends('admin._layout')
 @section('content')
+    <style>
+        .table2-style {
+            font-size: 13px;
+        }
+
+        .table2-style thead th {
+            background-color: #2c3e63;
+            color: #ffffff;
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 10px;
+            border-color: #2c3e63;
+        }
+
+        .table2-style tfoot th {
+            background-color: #eef1f5;
+            color: #2c3e63;
+            font-weight: 600;
+            text-align: left;
+            padding: 10px;
+        }
+
+        .table2-style tbody td {
+            padding: 10px;
+            vertical-align: middle;
+        }
+
+        .table2-style tbody tr:hover td {
+            background-color: #eef2ff;
+        }
+
+        .dataTables_wrapper .pagination .page-item.active .page-link,
+        .dataTables_wrapper .paginate_button.current,
+        .dataTables_wrapper .paginate_button.current:hover {
+            background: #2c3e63 !important;
+            border-color: #2c3e63 !important;
+            color: #ffffff !important;
+        }
+
+        .dataTables_wrapper .pagination .page-link,
+        .dataTables_wrapper .paginate_button {
+            color: #2c3e63;
+        }
+
+        .dataTables_wrapper .pagination .page-link:hover,
+        .dataTables_wrapper .paginate_button:hover {
+            background: #eef1f5 !important;
+            border-color: #2c3e63 !important;
+            color: #2c3e63 !important;
+        }
+
+        .badge.bg-warning {
+            color: #78350f !important;
+            background-color: #fbbf24 !important;
+            font-weight: 600;
+        }
+
+        .card-hover {
+            border-radius: 14px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-bottom: 20px;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+        }
+
+        .card-hover .box {
+            padding: 28px 16px;
+            border-radius: 14px;
+        }
+
+        .card-hover h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .card-hover h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .card-hover h6 {
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            opacity: 0.85;
+        }
+    </style>
     <div class="page-wrapper">
         <!-- ============================================================== -->
         <!-- Bread crumb and right sidebar toggle -->
@@ -240,10 +335,10 @@
                                     </div>
                                 @endif
                                 <div class="d-flex justify-content-start align-items-center" style="margin-bottom: 20px;">
-                                    <h5 class="card-title">History Absensi</h5>
+                                    <h5 class="card-title">History Absensi Hari Ini</h5>
                                 </div>
                                 <div class="table-responsive">
-                                    <table id="zero_config" class="table table-striped table-bordered">
+                                    <table id="zero_config" class="table table-striped table-bordered table2-style">
                                         <thead>
                                             <tr>
                                                     <th>Nama</th>
@@ -374,10 +469,10 @@
                                     </div>
                                 @endif
                                 <div class="d-flex justify-content-start align-items-center" style="margin-bottom: 20px;">
-                                    <h5 class="card-title">History Absensi</h5>
+                                    <h5 class="card-title">Riwayat Absensi Keseluruhan</h5>
                                 </div>
                                 <div class="table-responsive">
-                                    <table id="zero_config1" class="table table-striped table-bordered">
+                                    <table id="zero_config1" class="table table-striped table-bordered table2-style">
                                         <thead>
                                             <tr>
                                                     <th>Tanggal</th>

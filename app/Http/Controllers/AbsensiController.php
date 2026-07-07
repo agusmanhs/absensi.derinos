@@ -220,7 +220,7 @@ class AbsensiController extends Controller
     $hariIni = date('Y-m-d');
     $libur = Libur::where('tanggal', $tanggal)->exists();
 
-    if ($hari == 'Monday' or $libur) {
+    if ($hari == 'Sunday' or $libur) {
         return redirect()->route('user.dashboard')->with('info', 'Hari ini libur, Tidak ada jadwal Absensi');
     } else {
         if ($hadir) {
@@ -328,7 +328,6 @@ private function simpanFoto($base64, $prefix = 'masuk')
     $image = str_replace(' ', '+', $image);
     $imageData = base64_decode($image);
 
-    // Pastikan folder tujuan ada
     $folder = public_path('image/absensi');
     if (!file_exists($folder)) {
         mkdir($folder, 0755, true);
@@ -337,11 +336,11 @@ private function simpanFoto($base64, $prefix = 'masuk')
     $filename = $prefix . '_' . Auth::user()->id . '_' . time() . '.jpg';
     file_put_contents($folder . '/' . $filename, $imageData);
 
-    return 'absensi/' . $filename; // disimpan relatif, biar konsisten dengan kolom foto pegawai
+    return 'absensi/' . $filename; 
 }
 
 
-    // public function keluar(Request $request)
+// public function keluar(Request $request)
     // {
     //     $timezone = time() + (60 * 60 * 8);  
     //     $tanggal = gmdate('Y-m-d', $timezone);  
@@ -563,7 +562,7 @@ public function keluar(Request $request)
     $hariIni = date('Y-m-d');
     $libur = Libur::where('tanggal', $tanggal)->exists();
 
-    if ($hari == 'Monday' or $libur) {
+    if ($hari == 'Sunday' or $libur) {
         return redirect()->route('user.dashboard')->with('info', 'Hari ini libur, Tidak ada jadwal Absensi');
     } else {
         if ($hadir) {

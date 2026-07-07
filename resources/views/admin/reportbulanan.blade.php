@@ -1,5 +1,67 @@
 @extends('admin._layout')
 @section('content')
+    <style>
+        .table2-style {
+            font-size: 13px;
+        }
+
+        .table2-style thead th {
+            background-color: #2c3e63;
+            color: #ffffff;
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 10px;
+            border-color: #2c3e63;
+        }
+
+        .table2-style tfoot th {
+            background-color: #eef1f5;
+            color: #2c3e63;
+            font-weight: 600;
+            text-align: left;
+            padding: 10px;
+        }
+
+        .table2-style tbody td {
+            padding: 10px;
+            vertical-align: middle;
+        }
+
+        .table2-style tbody tr:hover td {
+            background-color: #eef2ff;
+        }
+
+        .btn-info {
+            background-color: #2c3e63 !important;
+            border-color: #2c3e63 !important;
+        }
+
+        .btn-info:hover,
+        .btn-info:focus {
+            background-color: #23324f !important;
+            border-color: #23324f !important;
+        }
+
+        .dataTables_wrapper .pagination .page-item.active .page-link,
+        .dataTables_wrapper .paginate_button.current,
+        .dataTables_wrapper .paginate_button.current:hover {
+            background: #2c3e63 !important;
+            border-color: #2c3e63 !important;
+            color: #ffffff !important;
+        }
+
+        .dataTables_wrapper .pagination .page-link,
+        .dataTables_wrapper .paginate_button {
+            color: #2c3e63;
+        }
+
+        .dataTables_wrapper .pagination .page-link:hover,
+        .dataTables_wrapper .paginate_button:hover {
+            background: #eef1f5 !important;
+            border-color: #2c3e63 !important;
+            color: #2c3e63 !important;
+        }
+    </style>
     <div class="page-wrapper">
         <!-- ============================================================== -->
         <!-- Bread crumb and right sidebar toggle -->
@@ -7,7 +69,7 @@
         <div class="page-breadcrumb">
             <div class="row">
                 <div class="col-12 d-flex no-block align-items-center">
-                    <h4 class="page-title">Dashboard</h4>
+                    <h4 class="page-title">Report Bulanan</h4>
                     <div class="ml-auto text-right">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
@@ -218,7 +280,7 @@
 
 
                             <div class="table-responsive">
-                                <table id="zero_config1" class="table table-striped table-bordered">
+                                <table id="zero_config1" class="table table-striped table-bordered table2-style">
                                     <thead>
                                         <tr>
                                             <th>Tanggal</th>

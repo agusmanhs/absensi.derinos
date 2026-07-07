@@ -1,5 +1,109 @@
 @extends('admin._layout')
 @section('content')
+    <style>
+        .table2-style {
+            font-size: 13px;
+        }
+
+        .table2-style thead th {
+            background-color: #2c3e63;
+            color: #ffffff;
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 10px;
+            border-color: #2c3e63;
+        }
+
+        .table2-style tfoot th {
+            background-color: #eef1f5;
+            color: #2c3e63;
+            font-weight: 600;
+            text-align: left;
+            padding: 10px;
+        }
+
+        .table2-style tbody td {
+            padding: 10px;
+            vertical-align: middle;
+        }
+
+        .table2-style tbody tr:hover td {
+            background-color: #eef2ff;
+        }
+
+        .btn-action-view,
+        .btn-action-edit,
+        .btn-action-delete {
+            width: 34px;
+            height: 34px;
+            border-radius: 6px;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s ease;
+        }
+
+        .btn-action-view {
+            background-color: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .btn-action-edit {
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+
+        .btn-action-delete {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .btn-action-view:hover,
+        .btn-action-edit:hover,
+        .btn-action-delete:hover {
+            transform: translateY(-2px);
+            filter: brightness(0.95);
+        }
+
+        .card-title-pegawai {
+            font-weight: 700;
+            color: #2c3e63;
+            font-size: 18px;
+        }
+
+        .btn-info {
+            background-color: #2c3e63 !important;
+            border-color: #2c3e63 !important;
+        }
+
+        .btn-info:hover,
+        .btn-info:focus {
+            background-color: #23324f !important;
+            border-color: #23324f !important;
+        }
+
+        .dataTables_wrapper .pagination .page-item.active .page-link,
+        .dataTables_wrapper .paginate_button.current,
+        .dataTables_wrapper .paginate_button.current:hover {
+            background: #2c3e63 !important;
+            border-color: #2c3e63 !important;
+            color: #ffffff !important;
+        }
+
+        .dataTables_wrapper .pagination .page-link,
+        .dataTables_wrapper .paginate_button {
+            color: #2c3e63;
+        }
+
+        .dataTables_wrapper .pagination .page-link:hover,
+        .dataTables_wrapper .paginate_button:hover {
+            background: #eef1f5 !important;
+            border-color: #2c3e63 !important;
+            color: #2c3e63 !important;
+        }
+    </style>
+
         <div class="page-wrapper">
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
@@ -40,8 +144,7 @@
                                     </div>
                                 @endif
                                 <div class="d-flex justify-content-end align-items-center" style="margin-bottom: 20px;">
-                                    {{-- <h5 class="card-title">Daftar Karyawan</h5> --}}
-
+                                    {{-- <h5 class="card-title-pegawai">Daftar Pegawai</h5> --}}
                                         <div class="d-flex align-items-center gap-2">
                                             {{-- <button type="button" class="btn btn-info text-white">
                                                 Tambah Pegawai
@@ -52,7 +155,7 @@
                                         </div>
                                 </div>
                                 <div class="table-responsive">
-                                    <table id="zero_config" class="table table-striped table-bordered">
+                                    <table id="zero_config" class="table table-striped table-bordered table2-style">
                                         <thead>
                                             <tr>
                                                 <th>Nama</th>
@@ -72,15 +175,15 @@
                                                     <td>{{ $y->user->email }}</td>
                                                     <td>{{ $y->notelp }}</td>
                                                     <td class="text-center">
-                                                        <button class="btn btn-sm me-1" data-toggle="modal" data-target="#detail{{ $y->id }}">
+                                                        <button class="btn btn-sm btn-action-view me-1" data-toggle="modal" data-target="#detail{{ $y->id }}">
                                                             <i class="mdi mdi-eye"></i>
                                                         </button>
                                                         
-                                                        <button class="btn btn-sm me-1" data-toggle="modal" data-target="#edit{{ $y->id }}">
+                                                        <button class="btn btn-sm btn-action-edit me-1" data-toggle="modal" data-target="#edit{{ $y->id }}">
                                                             <i class="mdi mdi-pencil"></i>
                                                         </button>
                                                         
-                                                        <button class="btn btn-sm me-1" onclick="hapusPegawai({{ $y->id }})">
+                                                        <button class="btn btn-sm btn-action-delete me-1" onclick="hapusPegawai({{ $y->id }})">
                                                             <i class="mdi mdi-delete"></i>
                                                         </button>
                                                     </td>

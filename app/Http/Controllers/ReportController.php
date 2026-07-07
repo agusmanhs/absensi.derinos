@@ -56,7 +56,7 @@ class ReportController extends Controller
             ->select('users.*', 'b.*')
             ->get();
 
-        $pdf = Pdf::loadView('admin.pdfharian', compact('absen', 'tanggal1'));
+        $pdf = Pdf::loadView('admin.pdfharian', compact('absen', 'tanggal1'))->setPaper('a4', 'landscape');
 
         return $pdf->stream('reportharian.pdf');
     }

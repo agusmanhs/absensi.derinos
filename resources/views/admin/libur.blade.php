@@ -1,20 +1,100 @@
 @extends('admin._layout')
 @section('content')
 
-{{-- <style>
-    /* Hilangkan background biru event */
-.fc-event {
-    background: #f50808 !important;
-    border: none !important;
-}
+    <style>
+        /* Styling event kalender untuk hari libur */
+        .fc-event {
+            background: #dc2626 !important;
+            border: none !important;
+        }
 
-/* Supaya teks tetap kelihatan */
-.fc-event .fc-title {
-    color: #ffffff;
-    font-weight: bold;
-}
+        .fc-event .fc-title {
+            color: #ffffff;
+            font-weight: bold;
+        }
+    </style>
 
-</style> --}}
+    <style>
+        .table2-style {
+            font-size: 13px;
+        }
+
+        .table2-style thead th {
+            background-color: #2c3e63;
+            color: #ffffff;
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 10px;
+            border-color: #2c3e63;
+        }
+
+        .table2-style tfoot th {
+            background-color: #eef1f5;
+            color: #2c3e63;
+            font-weight: 600;
+            text-align: left;
+            padding: 10px;
+        }
+
+        .table2-style tbody td {
+            padding: 10px;
+            vertical-align: middle;
+        }
+
+        .table2-style tbody tr:hover td {
+            background-color: #eef2ff;
+        }
+
+        .btn-info {
+            background-color: #2c3e63 !important;
+            border-color: #2c3e63 !important;
+        }
+
+        .btn-info:hover,
+        .btn-info:focus {
+            background-color: #23324f !important;
+            border-color: #23324f !important;
+        }
+
+        .btn-action-delete {
+            width: 34px;
+            height: 34px;
+            border-radius: 6px;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s ease;
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .btn-action-delete:hover {
+            transform: translateY(-2px);
+            filter: brightness(0.95);
+        }
+
+        .dataTables_wrapper .pagination .page-item.active .page-link,
+        .dataTables_wrapper .paginate_button.current,
+        .dataTables_wrapper .paginate_button.current:hover {
+            background: #2c3e63 !important;
+            border-color: #2c3e63 !important;
+            color: #ffffff !important;
+        }
+
+        .dataTables_wrapper .pagination .page-link,
+        .dataTables_wrapper .paginate_button {
+            color: #2c3e63;
+        }
+
+        .dataTables_wrapper .pagination .page-link:hover,
+        .dataTables_wrapper .paginate_button:hover {
+            background: #eef1f5 !important;
+            border-color: #2c3e63 !important;
+            color: #2c3e63 !important;
+        }
+    </style>
+
     <div class="page-wrapper">
         <!-- ============================================================== -->
         <!-- Bread crumb and right sidebar toggle -->
@@ -131,7 +211,7 @@
 
                                 </div>
                                 <div class="table-responsive">
-                                    <table id="zero_config" class="table table-striped table-bordered">
+                                    <table id="zero_config" class="table table-striped table-bordered table2-style">
                                         <thead>
                                             <tr>
                                                 <th>Tanggal</th>
@@ -146,7 +226,7 @@
                                                     <td>{{ $a->tanggal }}</td>
                                                     <td>{{ $a->keterangan }}</td>
                                                     <td class="text-center">
-                                                        <button class="btn btn-sm"
+                                                        <button class="btn btn-sm btn-action-delete"
                                                             onclick="hapusLibur({{ $a->id }})">
                                                             <i class="mdi mdi-delete"></i>
                                                         </button>
@@ -255,21 +335,21 @@
         }
     </script>
 
-    {{-- <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
 
             var events = [
                 @foreach ($liburs as $libur)
 
-                    // BACKGROUND FULL
+                    // BACKGROUND FULL (menandai seluruh kotak tanggal warna merah)
                     {
                         start: '{{ $libur->tanggal }}',
                         allDay: true,
                         rendering: 'background',
-                        backgroundColor: '#D73535'
+                        backgroundColor: '#dc2626'
                     },
 
-                    // TITLE
+                    // TITLE (keterangan hari libur muncul di kotak tanggal)
                     {
                         title: '{{ $libur->keterangan }}',
                         start: '{{ $libur->tanggal }}',
@@ -285,5 +365,5 @@
             });
 
         });
-    </script> --}}
+    </script>
 @endsection
