@@ -64,7 +64,7 @@
             margin: 15px 0;
             background-color: #f5f5f5;
             padding: 10px;
-            border-left: 4px solid #2c3e63;
+            border-left: 4px solid #0a399e;
         }
 
         .info-pegawai p {
@@ -80,7 +80,7 @@
         }
 
         .table2 th {
-            background-color: #2c3e63;
+            background-color: #0a399e;
             color: rgb(255, 255, 255);
             text-align: center;
             font-family: 'Poppins', sans-serif;
@@ -114,13 +114,13 @@
         }
 
         .ringkasan-container {
-            background-color: #2c3e63;
+            background-color: #0a399e;
             padding: 15px;
             margin-top: 15px;
         }
 
         .ringkasan-container td {
-            background-color: #2c3e63 !important;
+            background-color: #0a399e !important;
             color: #ffffff !important;
             font-family: 'Poppins', sans-serif;
             font-weight: 600;

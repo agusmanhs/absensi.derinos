@@ -1,5 +1,229 @@
 @extends('user._layout')
 @section('content')
+    <style>
+        /* ==== Disamakan dengan style tabel admin ==== */
+        .table2-style {
+            font-size: 13px;
+        }
+
+        .table2-style thead th {
+            background-color: #2c3e63;
+            color: #ffffff;
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 10px;
+            border-color: #2c3e63;
+        }
+
+        .table2-style tfoot th {
+            background-color: #eef1f5;
+            color: #2c3e63;
+            font-weight: 600;
+            text-align: left;
+            padding: 10px;
+        }
+
+        .table2-style tbody td {
+            padding: 10px;
+            vertical-align: middle;
+        }
+
+        .table2-style tbody tr:hover td {
+            background-color: #eef2ff;
+        }
+
+        .dataTables_wrapper .pagination .page-item.active .page-link,
+        .dataTables_wrapper .paginate_button.current,
+        .dataTables_wrapper .paginate_button.current:hover {
+            background: #2c3e63 !important;
+            border-color: #2c3e63 !important;
+            color: #ffffff !important;
+        }
+
+        .dataTables_wrapper .pagination .page-link,
+        .dataTables_wrapper .paginate_button {
+            color: #2c3e63;
+        }
+
+        .dataTables_wrapper .pagination .page-link:hover,
+        .dataTables_wrapper .paginate_button:hover {
+            background: #eef1f5 !important;
+            border-color: #2c3e63 !important;
+            color: #2c3e63 !important;
+        }
+
+        .badge.bg-warning {
+            color: #78350f !important;
+            background-color: #fbbf24 !important;
+            font-weight: 600;
+        }
+
+        /* ==== Perbaikan layout khusus halaman user (hanya CSS/struktur, tidak mengubah logika) ==== */
+        .map-card {
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .map-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .map-box iframe {
+            border: 0;
+        }
+
+        .profile-card-header {
+            padding: 28px 16px 18px;
+            border-bottom: 1px solid #eef1f5;
+        }
+
+        .profile-avatar-wrap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #eef1f5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .profile-name {
+            font-size: 19px;
+            font-weight: 700;
+            color: #2c3e63;
+        }
+
+        .profile-jabatan-badge {
+            background-color: #eef1f5;
+            color: #2c3e63;
+            font-weight: 600;
+            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+
+        .profile-info-list .list-group-item {
+            border: none;
+            border-bottom: 1px solid #eef1f5;
+            padding: 12px 4px;
+        }
+
+        .profile-info-list .list-group-item:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 767.98px) {
+            .table2-style {
+                font-size: 12px;
+            }
+
+            .card-title {
+                text-align: center;
+            }
+        }
+
+
+         /* ...CSS lama tetap, tambahkan/ganti bagian kamera di bawah ini... */
+
+    #modalKamera .modal-content {
+        border-radius: 16px;
+        overflow: hidden;
+        border: none;
+    }
+
+    #modalKamera .modal-header {
+        background-color: #2c3e63;
+        color: #fff;
+        border-bottom: none;
+        padding: 16px 20px;
+    }
+
+    #modalKamera .modal-header .modal-title {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    #modalKamera .modal-header .close {
+        color: #fff;
+        opacity: 0.85;
+        text-shadow: none;
+    }
+
+    #modalKamera .modal-header .close:hover {
+        opacity: 1;
+    }
+
+    /* Wrapper untuk menjaga rasio video/foto tetap konsisten */
+    .camera-frame {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        background-color: #000;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .camera-frame video,
+    .camera-frame img#preview {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 0;
+        display: block;
+    }
+
+    /* Mirror kamera depan supaya terasa natural seperti cermin */
+    .camera-frame video {
+        transform: scaleX(-1);
+    }
+
+    #infoLokasiKamera {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.65);
+        color: #fff;
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 12px;
+        line-height: 1.5;
+        text-align: center;
+        z-index: 10;
+        max-width: 90%;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+
+    #modalKamera .modal-body {
+        padding: 20px;
+        background-color: #f7f8fa;
+    }
+
+    #modalKamera .modal-footer {
+        border-top: none;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 20px 20px;
+    }
+
+    #modalKamera .modal-footer .btn {
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 8px 20px;
+    }
+    </style>
+
     <div class="page-wrapper">
         <!-- ============================================================== -->
         <!-- Bread crumb and right sidebar toggle -->
@@ -31,172 +255,53 @@
             <!-- ============================================================== -->
             <div class="row">
 
-                <div class="card mb-2 col-lg-6"
-                    style="height: 300px; border: none; background-color: #424144; width: 100%;">
-                    <div class="card-body d-flex justify-content-center align-items-center" id="lokasidevices">
+                <div class="col-12 col-lg-6 mb-3 mb-lg-0">
+                    <div class="card map-card mb-2" style="height: 300px; border: none; background-color: #2c3e63; width: 100%;">
+                        <div class="card-body d-flex justify-content-center align-items-center map-box" id="lokasidevices">
 
+                        </div>
                     </div>
                 </div>
-                <div class="card mb-2 col-lg-6"
-                    style="height: 300px; border: none; background-color: #424144; width: 100%;">
-                    <div class="card-body d-flex justify-content-center align-items-center" id="lokasikantor">
-                        <iframe class="p-3" style="left:0;top:0;height:100%;width:100%;position:absolute;"
-                            src="https://maps.google.com/maps?q={{ $lat }}, {{ $long }}&output=embed"
-                            width="800" height="600" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div class="col-12 col-lg-6">
+                    <div class="card map-card mb-2" style="height: 300px; border: none; background-color: #2c3e63; width: 100%;">
+                        <div class="card-body d-flex justify-content-center align-items-center map-box" id="lokasikantor">
+                            <iframe class="p-3" style="left:0;top:0;height:100%;width:100%;position:absolute;"
+                                src="https://maps.google.com/maps?q={{ $lat }}, {{ $long }}&output=embed"
+                                width="800" height="600" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
                     </div>
                 </div>
             </div>
             <!-- ============================================================== -->
             <!-- Sales chart -->
             <!-- ============================================================== -->
-            {{-- <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-md-flex align-items-center">
-                                <div>
-                                    <h4 class="card-title">Site Analysis</h4>
-                                    <h5 class="card-subtitle">Overview of Latest Month</h5>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <!-- column -->
-                                <div class="col-lg-9">
-                                    <div class="flot-chart">
-                                        <div class="flot-chart-content" id="flot-line-chart"></div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="bg-dark p-10 text-white text-center">
-                                                <i class="fa fa-user m-b-5 font-16"></i>
-                                                <h5 class="m-b-0 m-t-5">2540</h5>
-                                                <small class="font-light">Total Users</small>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="bg-dark p-10 text-white text-center">
-                                                <i class="fa fa-plus m-b-5 font-16"></i>
-                                                <h5 class="m-b-0 m-t-5">120</h5>
-                                                <small class="font-light">New Users</small>
-                                            </div>
-                                        </div>
-                                        <div class="col-6 m-t-15">
-                                            <div class="bg-dark p-10 text-white text-center">
-                                                <i class="fa fa-cart-plus m-b-5 font-16"></i>
-                                                <h5 class="m-b-0 m-t-5">656</h5>
-                                                <small class="font-light">Total Shop</small>
-                                            </div>
-                                        </div>
-                                        <div class="col-6 m-t-15">
-                                            <div class="bg-dark p-10 text-white text-center">
-                                                <i class="fa fa-tag m-b-5 font-16"></i>
-                                                <h5 class="m-b-0 m-t-5">9540</h5>
-                                                <small class="font-light">Total Orders</small>
-                                            </div>
-                                        </div>
-                                        <div class="col-6 m-t-15">
-                                            <div class="bg-dark p-10 text-white text-center">
-                                                <i class="fa fa-table m-b-5 font-16"></i>
-                                                <h5 class="m-b-0 m-t-5">100</h5>
-                                                <small class="font-light">Pending Orders</small>
-                                            </div>
-                                        </div>
-                                        <div class="col-6 m-t-15">
-                                            <div class="bg-dark p-10 text-white text-center">
-                                                <i class="fa fa-globe m-b-5 font-16"></i>
-                                                <h5 class="m-b-0 m-t-5">8540</h5>
-                                                <small class="font-light">Online Orders</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- column -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
-            <!-- ============================================================== -->
-            <!-- Sales chart -->
-            <!-- ============================================================== -->
             <!-- ============================================================== -->
             <!-- Recent comment and chats -->
             <!-- ============================================================== -->
-            {{-- @if (session('warning'))
-                <div class="alert alert-danger" id="demo">
-                    {{ session('warning') }}
-                    jarak Anda dari kantor {{ session('jaraknya') }} meter
-                </div>
-            @endif --}}
             <div id="demo"></div>
 
             <div class="row">
                 <!-- column -->
-                <div class="col-lg-4">
+                <div class="col-12 col-lg-4">
                     <div class="card">
-                        <div class="mt-2 ml-3">
-                            <h4 class="card-title"></h4>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4 text-center ml-3">
-                                <img src="{{ asset('image/'.Auth::user()->pegawai->foto) }}" alt="Foto Karyawan" class="img-fluid"
-                                    width="250">
+                        <div class="profile-card-header text-center">
+                            <div class="profile-avatar-wrap">
+                                <img src="{{ asset('image/'.Auth::user()->pegawai->foto) }}" alt="Foto Karyawan" class="profile-avatar">
                             </div>
-
-                            <div class="col-md-6">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item"><strong>NIK:</strong> {{ Auth::user()->pegawai->nik }}</li>
-                                    <li class="list-group-item"><strong>Nama:</strong> {{ Auth::user()->pegawai->nama }}
-                                    </li>
-                                    <li class="list-group-item"><strong>Jabatan:</strong>
-                                        {{ Auth::user()->pegawai->jabatan->nama_jabatan }}</li>
-                                </ul>
-                            </div>
+                            <h4 class="profile-name mb-1">{{ Auth::user()->pegawai->nama }}</h4>
+                            <span class="badge profile-jabatan-badge">{{ Auth::user()->pegawai->jabatan->nama_jabatan }}</span>
                         </div>
 
-                    
-                        {{-- <div class="card my-3 mx-3" style="border-radius: 12px; cursor: pointer;">
-                            <form action="{{ route('absensi.masuk') }}" method="POST" id="absenForm">
-                                @csrf
-                                <input type="hidden" name="latitude" id="latitude">
-                                <input type="hidden" name="longitude" id="longitude">
-
-                                <button type="button" class="box bg-success w-100 py-3" onclick="getLocationAndSubmit()"
-                                    style="
-                                            color: white;
-                                            border: none;
-                                            font-size: 15px;
-                                            font-weight: bold;
-                                            border-radius: 10px;
-                                        ">
-                                    ABSEN MASUK
-                                </button>
-                            </form>
+                        <div class="px-3">
+                            <ul class="list-group list-group-flush profile-info-list">
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span class="text-muted">NIK</span>
+                                    <strong>{{ Auth::user()->pegawai->nik }}</strong>
+                                </li>
+                            </ul>
                         </div>
 
-                    
-                        <div class="card my-3 mx-3" style="border-radius: 12px; cursor: pointer;">
-                            <form action="{{ route('absensi.keluar') }}" method="POST" id="absenOut">
-                                @csrf
-                                <input type="hidden" name="latitude" id="lat">
-                                <input type="hidden" name="longitude" id="long">
-
-                                <button type="button" class="box bg-danger w-100 py-3" onclick="getLocationAndOut()"
-                                    style="
-                                            color: white;
-                                            border: none;
-                                            font-size: 15px;
-                                            font-weight: bold;
-                                            border-radius: 10px;
-                                        ">
-                                    ABSEN KELUAR
-                                </button>
-                            </form>
-                        </div> --}}
 
                         <div class="card my-3 mx-3" style="border-radius: 12px; cursor: pointer;">
                             <form action="{{ route('absensi.masuk') }}" method="POST" id="absenForm">
@@ -239,7 +344,7 @@
                             </form>
                         </div>
 
-                    
+
                         <div class="card my-3 mx-3" style="border-radius: 12px; cursor: pointer;" data-toggle="modal" data-target="#add-new-event">
                             <button type="button" class="box bg-info w-100 py-3"
                                 style="
@@ -253,57 +358,6 @@
                             </button>
                         </div>
 
-
-                        {{-- <div class="comment-widgets scrollable">
-                            <!-- Comment Row -->
-                            <div class="d-flex flex-row comment-row m-t-0">
-                                <div class="p-2"><img src="{{ asset('/matrix-admin/') }}/assets/images/users/1.jpg"
-                                        alt="user" width="50" class="rounded-circle"></div>
-                                <div class="comment-text w-100">
-                                    <h6 class="font-medium">James Anderson</h6>
-                                    <span class="m-b-15 d-block">Lorem Ipsum is simply dummy text of the printing and type
-                                        setting industry. </span>
-                                    <div class="comment-footer">
-                                        <span class="text-muted float-right">April 14, 2016</span>
-                                        <button type="button" class="btn btn-cyan btn-sm">Edit</button>
-                                        <button type="button" class="btn btn-success btn-sm">Publish</button>
-                                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Comment Row -->
-                            <div class="d-flex flex-row comment-row">
-                                <div class="p-2"><img src="{{ asset('/matrix-admin/') }}/assets/images/users/4.jpg"
-                                        alt="user" width="50" class="rounded-circle"></div>
-                                <div class="comment-text active w-100">
-                                    <h6 class="font-medium">Michael Jorden</h6>
-                                    <span class="m-b-15 d-block">Lorem Ipsum is simply dummy text of the printing and type
-                                        setting industry. </span>
-                                    <div class="comment-footer">
-                                        <span class="text-muted float-right">May 10, 2016</span>
-                                        <button type="button" class="btn btn-cyan btn-sm">Edit</button>
-                                        <button type="button" class="btn btn-success btn-sm">Publish</button>
-                                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Comment Row -->
-                            <div class="d-flex flex-row comment-row">
-                                <div class="p-2"><img src="{{ asset('/matrix-admin/') }}/assets/images/users/5.jpg"
-                                        alt="user" width="50" class="rounded-circle"></div>
-                                <div class="comment-text w-100">
-                                    <h6 class="font-medium">Johnathan Doeting</h6>
-                                    <span class="m-b-15 d-block">Lorem Ipsum is simply dummy text of the printing and type
-                                        setting industry. </span>
-                                    <div class="comment-footer">
-                                        <span class="text-muted float-right">August 1, 2016</span>
-                                        <button type="button" class="btn btn-cyan btn-sm">Edit</button>
-                                        <button type="button" class="btn btn-success btn-sm">Publish</button>
-                                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
                     </div>
                     <!-- Card -->
                     <!-- card -->
@@ -311,7 +365,7 @@
                 </div>
                 <!-- column -->
 
-                <div class="col-lg-8">
+                <div class="col-12 col-lg-8">
                     <!-- Card -->
                     <div class="card">
                         <div class="card-body">
@@ -324,7 +378,7 @@
                                 <h5 class="card-title">History Absensi</h5>
                             </div>
                             <div class="table-responsive">
-                                <table id="zero_config" class="table table-striped table-bordered">
+                                <table id="zero_config" class="table table-striped table-bordered table2-style">
                                     <thead>
                                         <tr>
                                                     <th>Tanggal</th>
@@ -350,7 +404,7 @@
                                                 <td class="text-center">
                                                     @if ($y->foto_masuk)
                                                         <img src="{{ asset('image/'.$y->foto_masuk) }}" 
-                                                            style="width:60px; height:60px; object-fit:cover; border-radius:6px; cursor:pointer;"
+                                                            style="width:50px; height:50px; object-fit:cover; border-radius:6px; cursor:pointer;"
                                                             onclick="lihatFotoBesar('{{ asset('image/'.$y->foto_masuk) }}')">
                                                     @else
                                                         <span class="text-muted">-</span>
@@ -366,7 +420,7 @@
                                                 <td class="text-center">
                                                     @if ($y->foto_keluar)
                                                         <img src="{{ asset('image/'.$y->foto_keluar) }}" 
-                                                            style="width:60px; height:60px; object-fit:cover; border-radius:6px; cursor:pointer;"
+                                                            style="width:50px; height:50px; object-fit:cover; border-radius:6px; cursor:pointer;"
                                                             onclick="lihatFotoBesar('{{ asset('image/'.$y->foto_keluar) }}')">
                                                     @else
                                                         <span class="text-muted">-</span>
@@ -454,15 +508,13 @@
                             <h5 class="modal-title">Ambil Foto Absensi</h5>
                             <button type="button" class="close" onclick="tutupKamera()">&times;</button>
                         </div>
-                        <div class="modal-body text-center" style="position: relative;">
-                            <div id="infoLokasiKamera" style="
-                                position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
-                                background: rgba(0,0,0,0.65); color: #fff; padding: 6px 12px;
-                                border-radius: 6px; font-size: 12px; z-index: 10; white-space: nowrap;">
+                        <div class="modal-body text-center">
+                            <div class="camera-frame">
+                                <div id="infoLokasiKamera"></div>
+                                <video id="camera" autoplay playsinline></video>
+                                <canvas id="snapshot" style="display:none;"></canvas>
+                                <img id="preview" style="display:none;">
                             </div>
-                            <video id="camera" autoplay playsinline style="width:100%; border-radius:8px; display:block;"></video>
-                            <canvas id="snapshot" style="display:none;"></canvas>
-                            <img id="preview" style="width:100%; border-radius:8px; display:none;">
                         </div>
                         <div class="modal-footer">
                             <button type="button" id="btnAmbilFoto" class="btn btn-primary" onclick="ambilFoto()">Ambil Foto</button>
@@ -472,6 +524,8 @@
                     </div>
                 </div>
             </div>
+
+
 
     @if (session('warning'))
         <script>
@@ -507,134 +561,6 @@
             alert("Sorry, no position available.");
         }
     </script>
-
-    {{-- <script>
-        function getLocationAndSubmit() {
-            const demoDiv = document.getElementById('demo');
-
-            if (navigator.geolocation) {
-                demoDiv.innerHTML = "Mengambil lokasi...";
-
-                navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        // Set nilai latitude dan longitude
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-
-                        document.getElementById('latitude').value = lat;
-                        document.getElementById('longitude').value = lng;
-
-                        // Debug: tampilkan nilai
-                        console.log('Latitude:', lat);
-                        console.log('Longitude:', lng);
-                        console.log('Form Latitude:', document.getElementById('latitude').value);
-                        console.log('Form Longitude:', document.getElementById('longitude').value);
-
-                        demoDiv.innerHTML = `Lokasi ditemukan: ${lat}, ${lng}`;
-
-                        // Pastikan nilai sudah terisi sebelum submit
-                        if (document.getElementById('latitude').value && document.getElementById('longitude').value) {
-                            document.getElementById('absenForm').submit();
-                        } else {
-                            alert('Gagal mengisi data lokasi!');
-                        }
-                    },
-                    function(error) {
-                        let errorMessage = '';
-                        switch (error.code) {
-                            case error.PERMISSION_DENIED:
-                                errorMessage = "Izin akses lokasi ditolak!";
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                errorMessage = "Informasi lokasi tidak tersedia!";
-                                break;
-                            case error.TIMEOUT:
-                                errorMessage = "Waktu permintaan lokasi habis!";
-                                break;
-                            default:
-                                errorMessage = "Terjadi kesalahan: " + error.message;
-                                break;
-                        }
-
-                        demoDiv.innerHTML = errorMessage;
-                        alert(errorMessage);
-                        console.error('Error Geolocation:', error);
-                    }, {
-                        enableHighAccuracy: true,
-                        timeout: 10000,
-                        maximumAge: 0
-                    }
-                );
-            } else {
-                demoDiv.innerHTML = "Browser tidak mendukung Geolocation!";
-                alert("Browser Anda tidak mendukung Geolocation!");
-            }
-        }
-    </script>
-
-    <script>
-        function getLocationAndOut() {
-            const demoDiv = document.getElementById('demo');
-
-            if (navigator.geolocation) {
-                demoDiv.innerHTML = "Mengambil lokasi...";
-
-                navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        // Set nilai latitude dan longitude
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-
-                        document.getElementById('lat').value = lat;
-                        document.getElementById('long').value = lng;
-
-                        // Debug: tampilkan nilai
-                        console.log('Latitude:', lat);
-                        console.log('Longitude:', lng);
-                        console.log('Form Latitude:', document.getElementById('lat').value);
-                        console.log('Form Longitude:', document.getElementById('long').value);
-
-                        demoDiv.innerHTML = `Lokasi ditemukan: ${lat}, ${lng}`;
-
-                        // Pastikan nilai sudah terisi sebelum submit
-                        if (document.getElementById('lat').value && document.getElementById('long').value) {
-                            document.getElementById('absenOut').submit();
-                        } else {
-                            alert('Gagal mengisi data lokasi!');
-                        }
-                    },
-                    function(error) {
-                        let errorMessage = '';
-                        switch (error.code) {
-                            case error.PERMISSION_DENIED:
-                                errorMessage = "Izin akses lokasi ditolak!";
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                errorMessage = "Informasi lokasi tidak tersedia!";
-                                break;
-                            case error.TIMEOUT:
-                                errorMessage = "Waktu permintaan lokasi habis!";
-                                break;
-                            default:
-                                errorMessage = "Terjadi kesalahan: " + error.message;
-                                break;
-                        }
-
-                        demoDiv.innerHTML = errorMessage;
-                        alert(errorMessage);
-                        console.error('Error Geolocation:', error);
-                    }, {
-                        enableHighAccuracy: true,
-                        timeout: 10000,
-                        maximumAge: 0
-                    }
-                );
-            } else {
-                demoDiv.innerHTML = "Browser tidak mendukung Geolocation!";
-                alert("Browser Anda tidak mendukung Geolocation!");
-            }
-        }
-    </script> --}}
 
 <script>
     let stream;
@@ -758,36 +684,41 @@
     }
 
     function ambilFoto() {
-        if (!lokasiValid) {
-            alert('Anda terlalu jauh dari lokasi kantor. Tidak bisa mengambil foto.');
-            return;
-        }
-
-        const video = document.getElementById('camera');
-        const canvas = document.getElementById('snapshot');
-        const preview = document.getElementById('preview');
-
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext('2d').drawImage(video, 0, 0);
-
-        const base64 = canvas.toDataURL('image/jpeg', 0.7);
-
-        if (currentAction === 'masuk') {
-            document.getElementById('fotoMasuk').value = base64;
-        } else {
-            document.getElementById('fotoKeluar').value = base64;
-        }
-
-        preview.src = base64;
-        preview.style.display = 'block';
-        video.style.display = 'none';
-
-        document.getElementById('btnAmbilFoto').style.display = 'none';
-        document.getElementById('btnUlangFoto').style.display = 'inline-block';
-        document.getElementById('btnKirimAbsen').style.display = 'inline-block';
+    if (!lokasiValid) {
+        alert('Anda terlalu jauh dari lokasi kantor. Tidak bisa mengambil foto.');
+        return;
     }
 
+    const video = document.getElementById('camera');
+    const canvas = document.getElementById('snapshot');
+    const preview = document.getElementById('preview');
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext('2d');
+    ctx.save();
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);          // <-- flip horizontal saat menggambar, supaya hasil tidak mirror
+    ctx.drawImage(video, 0, 0);
+    ctx.restore();
+
+    const base64 = canvas.toDataURL('image/jpeg', 0.7);
+
+    if (currentAction === 'masuk') {
+        document.getElementById('fotoMasuk').value = base64;
+    } else {
+        document.getElementById('fotoKeluar').value = base64;
+    }
+
+    preview.src = base64;
+    preview.style.display = 'block';
+    video.style.display = 'none';
+
+    document.getElementById('btnAmbilFoto').style.display = 'none';
+    document.getElementById('btnUlangFoto').style.display = 'inline-block';
+    document.getElementById('btnKirimAbsen').style.display = 'inline-block';
+}
     function ulangFoto() {
         const video = document.getElementById('camera');
         const preview = document.getElementById('preview');
