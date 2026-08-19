@@ -570,6 +570,7 @@
     const officeLat = {{ $lat }};
     const officeLng = {{ $long }};
     const batasJarak = {{ $batasJarak ?? 999999 }};
+    const wajibSelfie = {{ Auth::user()->pegawai->wajib_selfie ? 'true' : 'false' }};
 
     function getLocationAndSubmit() {
         ambilLokasi('masuk');
@@ -620,7 +621,11 @@
 
                 demoDiv.innerHTML = `Lokasi ditemukan: ${lat.toFixed(6)}, ${lng.toFixed(6)} — Jarak dari kantor: ${jarak} meter`;
 
-                bukaKamera(lat, lng, jarak);
+                if (wajibSelfie) {
+                    bukaKamera(lat, lng, jarak);
+                } else {
+                    langsungAbsen(lat, lng, jarak);
+                }
             },
             function (error) {
                 let errorMessage = '';
@@ -646,6 +651,21 @@
                 maximumAge: 0
             }
         );
+    }
+
+    // Dipakai untuk pegawai yang TIDAK wajib selfie: langsung submit
+    // form absen (tanpa kamera) selama lokasi valid.
+    function langsungAbsen(lat, lng, jarak) {
+        if (!lokasiValid) {
+            alert(`Anda terlalu jauh dari lokasi kantor (${jarak} m, batas ${batasJarak} m). Absen dibatalkan.`);
+            return;
+        }
+
+        if (currentAction === 'masuk') {
+            document.getElementById('absenForm').submit();
+        } else {
+            document.getElementById('absenOut').submit();
+        }
     }
 
     async function bukaKamera(lat, lng, jarak) {

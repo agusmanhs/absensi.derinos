@@ -62,6 +62,7 @@ class PegawaiController extends Controller
                 'notelp' => $request->notelp,
                 'alamat' => $request->alamat,
                 'foto' => $fotoName,
+                'wajib_selfie' => $request->has('wajib_selfie') ? 1 : 0,
             ]);
             DB::commit();
 
@@ -169,5 +170,20 @@ class PegawaiController extends Controller
         
         $pegawai->delete();
         return redirect()->route('admin.pegawai')->with('delete', 'Data pegawai berhasil dihapus!');
+    }
+
+    /**
+     * Toggle status wajib_selfie untuk satu pegawai (dipanggil via AJAX dari tabel).
+     */
+    public function toggleSelfie(Request $request, $id)
+    {
+        $pegawai = Pegawai::findOrFail($id);
+        $pegawai->wajib_selfie = ! $pegawai->wajib_selfie;
+        $pegawai->save();
+
+        return response()->json([
+            'success' => true,
+            'wajib_selfie' => $pegawai->wajib_selfie,
+        ]);
     }
 }

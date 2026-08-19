@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('jenisKelamin');
             $table->string('alamat');
             $table->string('notelp');
+            $table->boolean('wajib_selfie')->default(true);
             $table->timestamps();
         });
     }

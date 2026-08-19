@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/admin/pegawai/tambah', [PegawaiController::class, 'store'])->name('admin.tambah.pegawai');
     Route::put('/admin/pegawai/update/{id}', [PegawaiController::class, 'update'])->name('admin.update.pegawai');
     Route::delete('/admin/pegawai/delete/{id}', [PegawaiController::class, 'destroy'])->name('admin.delete.pegawai');
+    Route::put('/admin/pegawai/toggle-selfie/{id}', [PegawaiController::class, 'toggleSelfie'])->name('admin.toggle.selfie');
 
     Route::get('/admin/lokasi', [LokasiController::class, 'index'])->name('admin.lokasi');
     Route::post('/admin/lokasi/tambah', [LokasiController::class, 'store'])->name('admin.tambah.lokasi');

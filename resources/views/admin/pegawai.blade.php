@@ -102,6 +102,78 @@
             border-color: #2c3e63 !important;
             color: #2c3e63 !important;
         }
+
+        .badge-selfie-ya {
+            display: inline-block;
+            background-color: #16a34a;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .badge-selfie-tidak {
+            display: inline-block;
+            background-color: #6b7280;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        /* Toggle switch wajib selfie */
+        .selfie-switch {
+            position: relative;
+            display: inline-block;
+            width: 42px;
+            height: 22px;
+            vertical-align: middle;
+        }
+
+        .selfie-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .selfie-switch-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #d1d5db;
+            transition: 0.2s;
+            border-radius: 22px;
+        }
+
+        .selfie-switch-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: #ffffff;
+            transition: 0.2s;
+            border-radius: 50%;
+        }
+
+        .selfie-switch input:checked + .selfie-switch-slider {
+            background-color: #16a34a;
+        }
+
+        .selfie-switch input:checked + .selfie-switch-slider:before {
+            transform: translateX(20px);
+        }
+
+        .selfie-switch input:disabled + .selfie-switch-slider {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
     </style>
 
         <div class="page-wrapper">
@@ -163,6 +235,7 @@
                                                 <th>Jabatan</th>
                                                 <th>Username</th>
                                                 <th>No telp</th>
+                                                <th>Selfie</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -174,6 +247,15 @@
                                                     <td>{{ $y->jabatan->nama_jabatan }}</td>
                                                     <td>{{ $y->user->email }}</td>
                                                     <td>{{ $y->notelp }}</td>
+                                                    <td class="text-center">
+                                                        <label class="selfie-switch">
+                                                            <input type="checkbox"
+                                                                class="toggle-wajib-selfie"
+                                                                data-id="{{ $y->id }}"
+                                                                {{ $y->wajib_selfie ? 'checked' : '' }}>
+                                                            <span class="selfie-switch-slider"></span>
+                                                        </label>
+                                                    </td>
                                                     <td class="text-center">
                                                         <button class="btn btn-sm btn-action-view me-1" data-toggle="modal" data-target="#detail{{ $y->id }}">
                                                             <i class="mdi mdi-eye"></i>
@@ -296,6 +378,7 @@
                                                                         <li class="list-group-item"><strong>Jabatan:</strong> {{ $y->jabatan->nama_jabatan }}</li>
                                                                         <li class="list-group-item"><strong>No Telp:</strong> {{ $y->notelp }}</li>
                                                                         <li class="list-group-item"><strong>Email:</strong> {{ $y->user->email }}</li>
+                                                                        <li class="list-group-item"><strong>Wajib Selfie:</strong> {{ $y->wajib_selfie ? 'Ya' : 'Tidak' }}</li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
@@ -324,6 +407,7 @@
                                                 <th>Jabatan</th>
                                                 <th>Username</th>
                                                 <th>No telp</th>
+                                                <th>Selfie</th>
                                                 <th>Action</th>
                                             </tr>
                                         </tfoot>
@@ -430,6 +514,16 @@
                                             <input class="form-control form-white" placeholder="Masukkan password" type="password" name="password" />
                                         </div>
                                     </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="control-label d-flex align-items-center" style="gap: 8px; cursor: pointer;">
+                                                <input type="checkbox" name="wajib_selfie" value="1" checked
+                                                    style="width: 18px; height: 18px; margin: 0; cursor: pointer;">
+                                                Selfie Verification
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-danger waves-effect waves-light save-category">Save</button>
@@ -457,6 +551,45 @@
                             form.submit();
                         }
                     }
+
+                    // Toggle wajib_selfie langsung dari tabel (tanpa reload halaman)
+                    document.addEventListener('DOMContentLoaded', function () {
+                        document.querySelectorAll('.toggle-wajib-selfie').forEach(function (checkbox) {
+                            checkbox.addEventListener('change', function () {
+                                const id = this.dataset.id;
+                                const checkboxEl = this;
+                                checkboxEl.disabled = true;
+
+                                let url = "{{ route('admin.toggle.selfie', ':id') }}";
+                                url = url.replace(':id', id);
+
+                                fetch(url, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        'Accept': 'application/json',
+                                    },
+                                })
+                                .then(function (response) {
+                                    if (!response.ok) {
+                                        throw new Error('Gagal update');
+                                    }
+                                    return response.json();
+                                })
+                                .then(function (data) {
+                                    checkboxEl.checked = !!data.wajib_selfie;
+                                })
+                                .catch(function () {
+                                    // Balikkan checkbox ke posisi semula kalau gagal
+                                    checkboxEl.checked = !checkboxEl.checked;
+                                    alert('Gagal mengubah status wajib selfie. Coba lagi.');
+                                })
+                                .finally(function () {
+                                    checkboxEl.disabled = false;
+                                });
+                            });
+                        });
+                    });
                     </script>
                     
 
